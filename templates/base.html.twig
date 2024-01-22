@@ -27,14 +27,14 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                <a href="{# {{ path('user_create') }} #}" class="btn btn-primary">Créer un utilisateur</a>
-
+                
                 {% if app.user %}
-                <a href="{{ path('deconnexion') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
-
+                
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{# {{ path('connexion') }} #}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
+                <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
                 {% endif %}
             </div>
 
