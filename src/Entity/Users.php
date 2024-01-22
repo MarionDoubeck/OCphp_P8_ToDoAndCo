@@ -29,7 +29,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $email = null;
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Tasks::class, orphanRemoval: true)]
