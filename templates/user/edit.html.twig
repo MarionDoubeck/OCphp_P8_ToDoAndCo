@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos informations personnelles{% endblock %}
+
+
+
+{% block body %}
+{% if not app.user %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Cette page n'est pas accessible aux utilisateurs non connectés</strong> 
+    </div>
+    <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
+    <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
+{% else %}
+{{ form_errors(editUserForm) }}
+{{ form_start(editUserForm) }}
+    {{ form_row(editUserForm.email, {'value': app.user.email}) }}
+    {{ form_row(editUserForm.username, {'value': app.user.username}) }}
+    {{ form_row(editUserForm.plainPassword, {
+        'label': 'Modifiez votre mot de passe ou laissez vide',
+        'required': false
+    }) }}
+    {% if 'ROLE_ADMIN' in app.user.roles %}
+        {% set adminLabel = 'Voulez-vous rester administrateur ? Oui' %}
+    {% else %}
+        {% set adminLabel = 'Voulez-vous devenir administrateur ? Oui' %}
+    {% endif %}
+    {{ form_row(editUserForm.roles, {
+        'label': adminLabel
+    }) }}
+    <div>
+        <button type="submit" class="btn btn-primary my-3">Modifier mes informations</button>
+    </div>
+{{ form_end(editUserForm) }}
+{% endif %}
+{% endblock %}
