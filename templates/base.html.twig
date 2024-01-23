@@ -29,6 +29,7 @@
             <div class="row">
                 
                 {% if app.user %}
+                <a href='/mon-profil-utilisateur/{{app.user.username}}' class="pull-right btn btn-primary">Mon profil</a>
                 <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
                 
@@ -80,7 +81,7 @@
 
         </div>
 
-        <script src="{{ asset('js/jquery.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        {# <script src="{{ asset('assets/js/jquery.js') }}"></script> #}
+        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     </body>
 </html>
