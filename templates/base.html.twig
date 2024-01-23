@@ -27,14 +27,15 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                <a href="{# {{ path('user_create') }} #}" class="btn btn-primary">Créer un utilisateur</a>
-
+                
                 {% if app.user %}
-                <a href="{# {{ path('logout') }} #}" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href='/mon-profil-utilisateur/{{app.user.username}}' class="pull-right btn btn-primary">Mon profil</a>
+                <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
-
+                
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{# {{ path('login') }} #}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
+                <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
                 {% endif %}
             </div>
 
@@ -80,7 +81,7 @@
 
         </div>
 
-        <script src="{{ asset('js/jquery.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        {# <script src="{{ asset('assets/js/jquery.js') }}"></script> #}
+        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     </body>
 </html>
