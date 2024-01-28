@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Form\EditUserFormType;
-use App\Security\UsersAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,7 +17,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class UserController extends AbstractController
 {
-
 
     /**
      * Displays the index page of the user profile.
@@ -44,10 +41,8 @@ class UserController extends AbstractController
         Users $userToEdit, 
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
-        UserAuthenticatorInterface $userAuthenticator, 
-        UsersAuthenticator $authenticator, 
         EntityManagerInterface $entityManager,
-        TokenInterface $tokenStorage // Dependency injection for TokenStorageInterface ; if omitted edit will logout the user.
+        TokenInterface $tokenStorage // Dependency injection for TokenStorageInterface ; if omitted edit will logout the user after any edition even username or email.
     ): Response
     {
         $form = $this->createForm(EditUserFormType::class, $userToEdit);
@@ -71,19 +66,28 @@ class UserController extends AbstractController
             }
             // Set roles.
             $roles = $form->get('roles')->getData();
-            if($roles !== $userToEdit->getRoles()){
-                if($roles){
-                    $userToEdit -> setRoles(['ROLE_ADMIN', 'ROLE_USER']);
-                }else{
-                    $userToEdit -> setRoles(['ROLE_USER']);
+            if($roles){
+                $realRoles = ['ROLE_ADMIN', 'ROLE_USER'];
+                if($roles !== $userToEdit->getRoles()){
+                    $userToEdit -> setRoles($realRoles);
+                }
+            }else{
+                $realRoles = ['ROLE_USER'];
+                if($roles !== $userToEdit->getRoles()){
+                    $userToEdit -> setRoles($realRoles);
                 }
             }
 
             $entityManager->persist($userToEdit);
             $entityManager->flush();
 
-            $this->addFlash('success','Votre profil a bien été modifié');
-            return $this->redirectToRoute('user_profile', ['username' => $userToEdit->getUsername(),'_fragment' => 'flash']);
+            if ($roles || $form->get('plainPassword')->getData()){
+                $this->addFlash('success','Votre profil a bien été modifié, merci de vous reconnecter');
+                return $this->redirectToRoute('app_login', ['_fragment' => 'flash']);
+            } else {
+                $this->addFlash('success','Votre profil a bien été modifié');
+                return $this->redirectToRoute('user_profile', ['username' => $userToEdit->getUsername(),'_fragment' => 'flash']);
+            }
         }
         return $this->render('user/edit.html.twig', [
             'controller_name' => 'UserController',
