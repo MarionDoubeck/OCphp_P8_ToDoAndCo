@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * Controller for user-related actions.
@@ -40,7 +41,8 @@ class UserController extends AbstractController
         Users $userToEdit, 
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        TokenInterface $tokenStorage // Dependency injection for TokenStorageInterface ; if omitted edit will logout the user after any edition even username or email.
     ): Response
     {
         $form = $this->createForm(EditUserFormType::class, $userToEdit);
@@ -79,8 +81,13 @@ class UserController extends AbstractController
             $entityManager->persist($userToEdit);
             $entityManager->flush();
 
-            $this->addFlash('success','Votre profil a bien été modifié, merci de vous reconnecter');
-            return $this->redirectToRoute('app_login', ['_fragment' => 'flash']);
+            if ($roles || $form->get('plainPassword')->getData()){
+                $this->addFlash('success','Votre profil a bien été modifié, merci de vous reconnecter');
+                return $this->redirectToRoute('app_login', ['_fragment' => 'flash']);
+            } else {
+                $this->addFlash('success','Votre profil a bien été modifié');
+                return $this->redirectToRoute('user_profile', ['username' => $userToEdit->getUsername(),'_fragment' => 'flash']);
+            }
         }
         return $this->render('user/edit.html.twig', [
             'controller_name' => 'UserController',
