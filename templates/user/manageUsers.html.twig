@@ -1,8 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des utilisateurs{% endblock %}
-
+{% block hero %}
+Gestion des utilisateurs
+{% endblock %}
 {% block body %}
+{% if not app.user or not is_granted('ROLE_ADMIN') %}
+    Seuls les adminisateurs ont accès à cette Page
+    <a href="{{ path('app_main') }}" class="btn btn-primary">Retour</a>
+{% else %}
+
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
             Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
@@ -33,11 +39,16 @@
                         </td>
                         <td>
                             <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-success btn-sm">Editer</a>
+                            <form method="post" action="{{ path('delete_user', {'username': user.username}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+        <a href="{{ path('app_register') }}" class="btn btn-todo">Enregistrer un nouvel utilisateur</a>
     {% endif %}
+{% endif %}
 {% endblock %}

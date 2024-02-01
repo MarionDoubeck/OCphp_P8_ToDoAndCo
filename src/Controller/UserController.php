@@ -5,29 +5,77 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
-use App\Form\EditUserFormType;
+use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use App\Security\UsersAuthenticator;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 /**
  * Controller for user-related actions.
  */
+#[IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
-
     /**
-     * Displays the index page of the user profile.
+     * Displays the page to manage the users.
      *
      * @return Response
      */
-    #[Route('/mon-profil-utilisateur/{username}', name: 'user_profile')]
-    public function index(): Response
+    #[Route('/gestion_des_utilisateurs', name: 'user_management')]
+    public function manageUsers(
+        EntityManagerInterface $entityManager,
+    ): Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'Profil de l\'utilisateur',
+        $users = $entityManager->getRepository(Users::class)->findAll();
+        return $this->render('user/manageUsers.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Displays the page to create an user.
+     *
+     * @return Response
+     */
+    #[Route('/gestion_des_utilisateurs/nouvel_utilisateur', name: 'app_register')]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    {
+        $user = new Users();
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Encode the plain password.
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+            // Set roles.
+            $roles = $form->get('roles')->getData();
+            if($roles){
+                $user -> setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+            }else{
+                $user -> setRoles(['ROLE_USER']);
+            }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+            
+            $this->addFlash('success','L\'utilisateur a bien été créé.');
+            return $this->redirectToRoute('user_management');
+
+        }
+
+        return $this->render('user/create.html.twig', [
+            'userForm' => $form->createView(),
         ]);
     }
 
@@ -36,16 +84,15 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/profil-utilisateur/{username}/modifier', name: 'edit_user')]
+    #[Route('/gestion_des_utilisateurs/modifier/{username}', name: 'edit_user')]
     public function edit(
         Users $userToEdit, 
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
         EntityManagerInterface $entityManager,
-        TokenInterface $tokenStorage // Dependency injection for TokenStorageInterface ; if omitted edit will logout the user after any edition even username or email.
     ): Response
     {
-        $form = $this->createForm(EditUserFormType::class, $userToEdit);
+        $form = $this->createForm(UserFormType::class, $userToEdit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -81,35 +128,36 @@ class UserController extends AbstractController
             $entityManager->persist($userToEdit);
             $entityManager->flush();
 
-            if ($roles || $form->get('plainPassword')->getData()){
-                $this->addFlash('success','Votre profil a bien été modifié, merci de vous reconnecter');
-                return $this->redirectToRoute('app_login', ['_fragment' => 'flash']);
-            } else {
-                $this->addFlash('success','Votre profil a bien été modifié');
-                return $this->redirectToRoute('user_profile', ['username' => $userToEdit->getUsername(),'_fragment' => 'flash']);
-            }
+            $this->addFlash('success','Le profil de ' . $userToEdit->getUsername() . ' a bien été modifié');
+            return $this->redirectToRoute('user_management');
         }
         return $this->render('user/edit.html.twig', [
             'controller_name' => 'UserController',
-            'user' => $userToEdit,
-            'editUserForm' => $form->createView(),
+            'userToEdit' => $userToEdit,
+            'userForm' => $form->createView(),
         ]);
         
     }
 
     /**
-     * Displays the page to manage the users.
+     * Displays the page for deleting user.
      *
      * @return Response
      */
-    #[Route('/gestion_des_utilisateurs', name: 'user_management')]
-    public function manageUsers(
-        EntityManagerInterface $entityManager,
-    ): Response
+    #[Route('/gestion_des_utilisateurs/supprimer/{username}', name: 'delete_user')]
+    public function deleteUser(
+        Users $userToDelete,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse
     {
-        $users = $entityManager->getRepository(Users::class)->findAll();
-        return $this->render('user/manageUsers.html.twig', [
-            'users' => $users,
-        ]);
+        // Supprimer l'utilisateur
+        $entityManager->remove($userToDelete);
+        $entityManager->flush();
+
+        // Ajouter un message flash de succès
+        $this->addFlash('success', 'L\'utilisateur ' . $userToDelete->getUsername() . ' a été supprimé avec succès');
+
+        // Rediriger vers la page de gestion des utilisateurs ou une autre page de votre choix
+        return $this->redirectToRoute('user_management');
     }
 }
