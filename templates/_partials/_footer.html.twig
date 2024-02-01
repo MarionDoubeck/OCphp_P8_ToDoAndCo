@@ -8,6 +8,11 @@
                     </svg>
                     <span class="hide-on-mobile">Gérer les utilisateurs</span>
                 </a>
+
+                <a href="{{ path('app_register') }}">
+                    <img src="{{ asset('assets/img/add_user.svg') }}" alt="creer un utilisateur">
+                    <span class="hide-on-mobile">Enregistrer un nouvel utilisateur</span>
+                </a>
             {% endif %}
             <a href="{{ path('app_logout') }}">
                 <svg class="icon white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
