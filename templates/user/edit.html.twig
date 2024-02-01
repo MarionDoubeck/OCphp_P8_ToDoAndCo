@@ -1,36 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vos informations personnelles{% endblock %}
-
-
+{% block hero %}Modifier le profil de {{ userToEdit.username }}{% endblock %}
 
 {% block body %}
-{% if not app.user %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Cette page n'est pas accessible aux utilisateurs non connectés</strong> 
-    </div>
-    <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
-    <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
+{% if not app.user or not is_granted('ROLE_ADMIN') %}
+    Seuls les adminisateurs ont accès à cette Page
+    <a href="{{ path('app_main') }}" class="btn btn-primary">Retour</a>
 {% else %}
-{{ form_errors(editUserForm) }}
-{{ form_start(editUserForm) }}
-    {{ form_row(editUserForm.email, {'value': app.user.email}) }}
-    {{ form_row(editUserForm.username, {'value': app.user.username}) }}
-    {{ form_row(editUserForm.plainPassword, {
-        'label': 'Modifiez votre mot de passe ou laissez vide',
-        'required': false
+{{ form_errors(userForm) }}
+{{ form_start(userForm, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_row(userForm.email) }}
+    {{ form_row(userForm.username) }}
+    {{ form_row(userForm.plainPassword, {
+        'label': 'Modifiez le mot de passe ou laissez-le vide pour ne pas le modifier'
     }) }}
-    {% if 'ROLE_ADMIN' in app.user.roles %}
-        {% set adminLabel = 'Voulez-vous rester administrateur ? Oui' %}
+    {% if 'ROLE_ADMIN' in userToEdit.roles %}
+        {% set adminLabel = 'Rester administrateur ? Oui' %}
     {% else %}
-        {% set adminLabel = 'Voulez-vous devenir administrateur ? Oui' %}
+        {% set adminLabel = 'Devenir administrateur ? Oui' %}
     {% endif %}
-    {{ form_row(editUserForm.roles, {
+    {{ form_row(userForm.roles, {
         'label': adminLabel
     }) }}
     <div>
         <button type="submit" class="btn btn-primary my-3">Modifier mes informations</button>
     </div>
-{{ form_end(editUserForm) }}
+{{ form_end(userForm) }}
 {% endif %}
 {% endblock %}
