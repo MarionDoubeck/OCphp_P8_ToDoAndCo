@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+    {% if users|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
+        </div>
+    {% else %}
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Adresse email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{% if 'ROLE_ADMIN' in user.roles %}
+                                Administrateur
+                            {% else %}
+                                Utilisateur
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-success btn-sm">Editer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

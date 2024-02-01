@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
 use App\Form\EditUserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
@@ -31,12 +31,12 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/mon-profil-utilisateur/{username}/modifier', name: 'edit_user')]
     /**
      * Displays the page for editing user data.
      *
      * @return Response
      */
+    #[Route('/profil-utilisateur/{username}/modifier', name: 'edit_user')]
     public function edit(
         Users $userToEdit, 
         Request $request, 
@@ -95,5 +95,21 @@ class UserController extends AbstractController
             'editUserForm' => $form->createView(),
         ]);
         
+    }
+
+    /**
+     * Displays the page to manage the users.
+     *
+     * @return Response
+     */
+    #[Route('/gestion_des_utilisateurs', name: 'user_management')]
+    public function manageUsers(
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $users = $entityManager->getRepository(Users::class)->findAll();
+        return $this->render('user/manageUsers.html.twig', [
+            'users' => $users,
+        ]);
     }
 }
