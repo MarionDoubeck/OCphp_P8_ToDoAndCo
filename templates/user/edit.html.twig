@@ -14,16 +14,16 @@
 {% else %}
 {{ form_errors(editUserForm) }}
 {{ form_start(editUserForm) }}
-    {{ form_row(editUserForm.email, {'value': app.user.email}) }}
-    {{ form_row(editUserForm.username, {'value': app.user.username}) }}
+    {{ form_row(editUserForm.email) }}
+    {{ form_row(editUserForm.username) }}
     {{ form_row(editUserForm.plainPassword, {
-        'label': 'Modifiez votre mot de passe ou laissez vide',
+        'label': 'Modifiez le mot de passe ou laissez-le vide pour ne pas le modifier',
         'required': false
     }) }}
     {% if 'ROLE_ADMIN' in app.user.roles %}
-        {% set adminLabel = 'Voulez-vous rester administrateur ? Oui' %}
+        {% set adminLabel = 'Rester administrateur ? Oui' %}
     {% else %}
-        {% set adminLabel = 'Voulez-vous devenir administrateur ? Oui' %}
+        {% set adminLabel = 'Devenir administrateur ? Oui' %}
     {% endif %}
     {{ form_row(editUserForm.roles, {
         'label': adminLabel

@@ -31,6 +31,7 @@
                 {% if app.user %}
                 <a href='/mon-profil-utilisateur/{{app.user.username}}' class="pull-right btn btn-primary">Mon profil</a>
                 <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href="{{ path('user_management') }}" class="pull-right btn btn-primary">Gérer les utilisateurs</a>
                 {% endif %}
                 
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
