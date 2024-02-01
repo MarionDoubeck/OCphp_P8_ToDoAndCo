@@ -38,9 +38,9 @@ Gestion des utilisateurs
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-success btn-sm">Editer</a>
+                            <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-todo btn-sm">Editer</a>
                             <form method="post" action="{{ path('delete_user', {'username': user.username}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <button type="submit" class="btn btn-todo-danger btn-sm">Supprimer</button>
                             </form>
                         </td>
                     </tr>
