@@ -135,7 +135,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
-            $task->setParent($this);
+            $task->setAuthor($this);
         }
 
         return $this;
@@ -145,8 +145,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->tasks->removeElement($task)) {
             // set the owning side to null (unless already changed)
-            if ($task->getParent() === $this) {
-                $task->setParent(null);
+            if ($task->getAuthor() === $this) {
+                $task->setAuthor(null);
             }
         }
 
