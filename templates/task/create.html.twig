@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block hero %}
+Créer une nouvelle tâche
+{% endblock %}
+{% block body %}
+    {% if not app.user %}
+        Veuillez vous connecter pour pouvoir créer une tâche
+    {% else %}
+        
+    {% endif %}
+{% endblock %}

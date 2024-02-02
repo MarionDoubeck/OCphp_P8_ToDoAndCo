@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block hero %}
+Editer une tâche
+{% endblock %}
+
+{% block body %}
+    {% if not app.user %}
+        Vous devez être l'auteur de cette tâche pour pouvoir la modifier
+    {% else %}
+        
+    {% endif %}
+{% endblock %}
