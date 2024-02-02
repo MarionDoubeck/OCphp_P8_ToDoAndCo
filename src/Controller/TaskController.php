@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tasks;
+use App\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -84,15 +85,48 @@ class TaskController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Toggles the status of a task (done/undone).
+     *
+     * @Route('/status/{title}', name='toggle_task')
+     *
+     * @param Tasks                  $task           The task entity to toggle.
+     * @param EntityManagerInterface $entityManager The entity manager for persisting changes.
+     *
+     * @return RedirectResponse Redirects to the appropriate task list view after toggling the task status.
+     */
+    #[Route('/status/{title}', name: 'toggle_task', methods: ["POST", "GET"])]
+    public function toggle(
+        Tasks $task,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse
+    {
+        $task->toggle(!$task->isDone());
+        $entityManager->flush();
+        $this->addFlash('success', 'le status de ' . $task->getTitle() . ' a été modifié avec succès');
+        if ($task->isDone()) {
+            return $this->redirectToRoute('todolist');
+        } else {
+            return $this->redirectToRoute('donelist');
+        }
+    }
+
     #[Route('/supprimer/{title}', name: 'delete_task')]
     public function delete(
         Tasks $taskToDelete,
         EntityManagerInterface $entityManager
     ): RedirectResponse
     {
-        $entityManager->remove($taskToDelete);
-        $entityManager->flush();
-        $this->addFlash('success', $taskToDelete->getTitle() . ' a été supprimé avec succès');
-        return $this->redirectToRoute('todolist');
+        $connectedUser = $this->getUser();
+        if($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) && 'Anonymus' === $taskToDelete->getAuthor()->getUsername())){
+            $entityManager->remove($taskToDelete);
+            $entityManager->flush();
+            $this->addFlash('success', $taskToDelete->getTitle() . ' a été supprimé avec succès');
+            return $this->redirectToRoute('todolist');
+        } else {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à supprimer cette tâche');
+            return $this->redirectToRoute('todolist');
+        }
     }
 }

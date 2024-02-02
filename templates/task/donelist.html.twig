@@ -34,7 +34,7 @@ Liste des tâches terminées
                             <td>{{ task.createdAt|date('Y-m-d H:i:s') }}</td>
                             <td>{{ task.author.username }}</td>
                             <td>
-                                <form method="post" action="{{ path('donelist', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr d\'avoir terminé cette tâche ?');">
+                                <form method="post" action="{{ path('toggle_task', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr de n\'avoir pas terminé cette tâche ?');">
                                     <button type="submit" class="btn btn-todo btn-sm">Marquée comme non terminée</button>
                                 </form>
                                 <a href="{{ path('edit_task', {'title' : task.title}) }}" class="btn btn-todo btn-sm">Editer</a>
