@@ -40,7 +40,7 @@ Liste des tâches terminées
                             </td>
                             <td class="text-center align-middle">
                                 <form method="post" action="{{ path('toggle_task', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr de n\'avoir pas terminé cette tâche ?');">
-                                    <button type="submit" class="btn btn-todo btn-sm">Non terminée</button>
+                                    <button type="submit" class="btn btn-todo btn-sm" style="width:110px">Non terminée</button>
                                 </form>
                             </td>
                             <td class="text-center align-middle">
