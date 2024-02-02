@@ -18,26 +18,35 @@ Liste des tâches terminées
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Tâche</th>
-                        <th>Description</th>
-                        <th>Date de création</th>
-                        <th>Auteur</th>
-                        <th>Actions</th>
+                        <th class="text-center">Tâche</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Date de création</th>
+                        <th class="text-center">Auteur</th>
+                        <th class="text-center" colspan="3">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for task in doneTasks %}
                         <tr>
-                            <th scope="row">{{ loop.index }}</th>
-                            <td>{{ task.title }}</td>
-                            <td>{{ task.content }}</td>
-                            <td>{{ task.createdAt|date('Y-m-d H:i:s') }}</td>
-                            <td>{{ task.author.username }}</td>
-                            <td>
+                            <th scope="row" class="align-middle">{{ loop.index }}</th>
+                            <td class="text-center align-middle">{{ task.title }}</td>
+                            <td class="text-center align-middle">{{ task.content }}</td>
+                            <td class="text-center align-middle">{{ task.createdAt|date('Y-m-d H:i:s') }}</td>
+                            <td class="text-center align-middle">{% if task.author.username == "Anonymus" %}
+                                    <img src="{{ asset('assets/img/anonymus.svg')}}" alt="anonyme" style="width:30px">
+                                {% else %}
+                                    {{ task.author.username }}
+                                {% endif %}
+                            </td>
+                            <td class="text-center align-middle">
                                 <form method="post" action="{{ path('toggle_task', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr de n\'avoir pas terminé cette tâche ?');">
-                                    <button type="submit" class="btn btn-todo btn-sm">Marquée comme non terminée</button>
+                                    <button type="submit" class="btn btn-todo btn-sm">Non terminée</button>
                                 </form>
-                                <a href="{{ path('edit_task', {'title' : task.title}) }}" class="btn btn-todo btn-sm">Editer</a>
+                            </td>
+                            <td class="text-center align-middle">
+                                <a href="{{ path('edit_task', {'title' : task.title}) }}" class="btn btn-todo btn-sm">Modifier</a>
+                            </td>
+                            <td class="text-center align-middle">
                                 <form method="post" action="{{ path('delete_task', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
                                     <button type="submit" class="btn btn-todo-danger btn-sm">Supprimer</button>
                                 </form>
