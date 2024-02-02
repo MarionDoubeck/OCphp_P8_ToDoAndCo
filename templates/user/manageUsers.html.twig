@@ -27,23 +27,25 @@ Gestion des utilisateurs
                 </thead>
                 <tbody>
                 {% for user in users %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{% if 'ROLE_ADMIN' in user.roles %}
-                                Administrateur
-                            {% else %}
-                                Utilisateur
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-todo btn-sm">Editer</a>
-                            <form method="post" action="{{ path('delete_user', {'username': user.username}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
-                                <button type="submit" class="btn btn-todo-danger btn-sm">Supprimer</button>
-                            </form>
-                        </td>
-                    </tr>
+                    {% if user.username != 'Anonymus' %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{% if 'ROLE_ADMIN' in user.roles %}
+                                    Administrateur
+                                {% else %}
+                                    Utilisateur
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('edit_user', {'username' : user.username}) }}" class="btn btn-todo btn-sm">Editer</a>
+                                <form method="post" action="{{ path('delete_user', {'username': user.username}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
+                                    <button type="submit" class="btn btn-todo-danger btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
