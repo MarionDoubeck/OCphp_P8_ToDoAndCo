@@ -150,14 +150,9 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager
     ): RedirectResponse
     {
-        // Supprimer l'utilisateur
         $entityManager->remove($userToDelete);
         $entityManager->flush();
-
-        // Ajouter un message flash de succès
         $this->addFlash('success', 'L\'utilisateur ' . $userToDelete->getUsername() . ' a été supprimé avec succès');
-
-        // Rediriger vers la page de gestion des utilisateurs ou une autre page de votre choix
         return $this->redirectToRoute('user_management');
     }
 }
