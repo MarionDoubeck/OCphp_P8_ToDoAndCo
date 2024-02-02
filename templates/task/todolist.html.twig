@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block hero %}
+Liste des tâches en cours
+{% endblock %}
+
+{% block body %}
+    {% if not app.user %}
+        Veuillez vous connecter pour accéder à la liste des tâches
+    {% else %}
+        {% if tasksToDo|length == 0 %}
+            <div class="alert alert-warning" role="alert">
+                Il n'y a pas de tâche en cours. <a href="{{ path('task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+            </div>
+        {% else %}
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tâche</th>
+                        <th>Description</th>
+                        <th>Date de création</th>
+                        <th>Auteur</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasksToDo %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.content }}</td>
+                            <td>{{ task.createdAt|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ task.author.username }}</td>
+                            <td>
+                                <form method="post" action="{{ path('donelist', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr d\'avoir terminé cette tâche ?');">
+                                    <button type="submit" class="btn btn-todo btn-sm">Marquée comme terminée</button>
+                                </form>
+                                <a href="{{ path('edit_task', {'title' : task.title}) }}" class="btn btn-todo btn-sm">Editer</a>
+                                <form method="post" action="{{ path('delete_task', {'title': task.title}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
+                                    <button type="submit" class="btn btn-todo-danger btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

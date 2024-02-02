@@ -21,6 +21,24 @@ class TasksRepository extends ServiceEntityRepository
         parent::__construct($registry, Tasks::class);
     }
 
+    public function findTasksNotDone()
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.isDone = :isDone')
+            ->setParameter('isDone', false)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTasksDone()
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.isDone = :isDone')
+            ->setParameter('isDone', true)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Tasks[] Returns an array of Tasks objects
 //     */
