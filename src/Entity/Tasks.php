@@ -28,7 +28,7 @@ class Tasks
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Users $parent = null;
+    private ?Users $author= null;
 
     public function getId(): ?int
     {
@@ -83,14 +83,14 @@ class Tasks
         return $this;
     }
 
-    public function getParent(): ?Users
+    public function getAuthor(): ?Users
     {
-        return $this->parent;
+        return $this->author;
     }
 
-    public function setParent(?Users $parent): static
+    public function setAuthor(?Users $author): static
     {
-        $this->parent = $parent;
+        $this->author = $author;
 
         return $this;
     }
