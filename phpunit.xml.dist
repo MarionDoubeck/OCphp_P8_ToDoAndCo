@@ -16,7 +16,9 @@
   </testsuites>
   <source>
     <include>
-      <directory suffix=".php">src/</directory>
+      <directory suffix=".php">src/Controller</directory>
+      <directory suffix=".php">src/Entity</directory>
+      <directory suffix=".php">src/Repository</directory>
     </include>
   </source>
 </phpunit>
