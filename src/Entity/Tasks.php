@@ -20,7 +20,8 @@ class Tasks
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options:['default'=>'CURRENT_TIMESTAMP'])]
+    /** @var \DateTimeImmutable|null The date and time when the task was created */
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
@@ -74,6 +75,13 @@ class Tasks
     public function isDone(): ?bool
     {
         return $this->isDone;
+    }
+
+    public function setIsDone(bool $isDone): static
+    {
+        $this->isDone = $isDone;
+
+        return $this;
     }
 
     public function toggle($flag)

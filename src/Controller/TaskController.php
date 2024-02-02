@@ -18,6 +18,60 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class TaskController extends AbstractController
 {
+
+    /**
+     * Process the form for adding or editing a trick.
+     *
+     * @param Task $task The task entity.
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $em The entity manager.
+     * @param bool $isEdit Indicates whether it's an edit operation.
+     * 
+     * @return Response
+     */
+    private function processTrickForm(
+        Tasks $task, 
+        Request $request,
+        EntityManagerInterface $entityManager,
+        bool $isEdit = false
+    ): Response
+    {
+        $form = $this->createForm(TaskFormType::class, $task);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (! $isEdit){
+            $task->setAuthor($this->getUser());
+            $task->setIsDone(false);
+            $task->setCreatedAt(new \DateTimeImmutable);
+            $entityManager->persist($task);
+            $entityManager->flush();
+            $this->addFlash('success','Votre tâche à bien été ajoutée');
+            return $this->redirectToRoute('todolist');
+            } else {
+                $entityManager->persist($task);
+                $entityManager->flush();
+                $this->addFlash('success','Votre tâche à bien été modifiée');
+                if ($task->isDone()) {
+                    return $this->redirectToRoute('donelist');
+                } else {
+                    return $this->redirectToRoute('todolist');
+                }
+            }
+        }
+
+        if(! $isEdit){
+            return $this->render('task/create.html.twig', [
+                'taskForm' => $form->createView(),
+            ]);
+        }else{
+            return $this->render('task/edit.html.twig', [
+                'taskForm' => $form->createView(),
+                'task' => $task,
+            ]);
+        }
+    }
+
+
     /**
      * Displays the page to manage the users.
      *
@@ -51,16 +105,8 @@ class TaskController extends AbstractController
         Request $request,
     ): Response
     {
-        $task = new Tasks;
-        $form = $this->createForm(TaskFormType::class, $task);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($task);
-            $entityManager->flush();
-        }
-        return $this->render('task/create.html.twig', [
-            'userForm' => $form->createView(),
-        ]);
+        $newTask = new Tasks;
+        return $this -> processTrickForm($newTask, $request, $entityManager, false);
     }
 
     #[Route('/modifier/{title}', name: 'edit_task')]
@@ -70,19 +116,7 @@ class TaskController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $form = $this->createForm(TaskFormType::class, $taskToEdit);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($taskToEdit);
-            $entityManager->flush();
-
-            $this->addFlash('success', $taskToEdit->getTitle() . ' a bien été modifié');
-            return $this->redirectToRoute('todolist');
-        }
-        return $this->render('task/edit.html.twig', [
-            'taskToEdit' => $taskToEdit,
-            'taskForm' => $form->createView(),
-        ]);
+        return $this -> processTrickForm($taskToEdit, $request, $entityManager, true);
     }
 
 
