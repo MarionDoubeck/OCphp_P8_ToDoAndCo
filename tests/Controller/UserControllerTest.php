@@ -2,90 +2,116 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Users;
-use App\Repository\UsersRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Util\ClassUtils;
+
 
 class UserControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
-
-    public function setUp(): void
+    /**
+     * Test case to check if the user management page is accessible.
+     */
+    public function testUserManagementPage()
     {
-        $this->client = static::createClient();
+        $client = static::createClient();
+        $client->request('GET', '/gestion_des_utilisateurs');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Gestion des utilisateurs');
     }
 
-    public function testManageUsers(): void
+    /**
+     * Test case to check if the new user registration page is accessible.
+     */
+    public function testNewUserRegistrationPage()
     {
-    // Créez un mock ou utilisez la vraie instance de votre EntityManager
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+        $client = static::createClient();
+        $client->request('GET', '/gestion_des_utilisateurs/nouvel_utilisateur');
 
-    // Créez un ou plusieurs utilisateurs pour simuler la réponse de la base de données
-    $user1 = new Users();
-    $user1->setUsername('john_doe');
-
-    $user2 = new Users();
-    $user2->setUsername('jane_doe');
-
-    // Simulez la méthode findAll() de votre repository
-    $repositoryMock = $this->createMock(UsersRepository::class);
-    $repositoryMock->expects($this->once())
-        ->method('findAll')
-        ->willReturn([$user1, $user2]);
-
-    // Configurez le gestionnaire d'entité pour renvoyer le mock du référentiel
-    $entityManager->method('getRepository')->willReturn($repositoryMock);
-
-    // Effectuez la requête GET sur l'URL du contrôleur
-    $this->client->request('GET', '/gestion_des_utilisateurs');
-
-    // Vérifiez que la réponse est réussie
-    $this->assertResponseIsSuccessful();
-
-    // Vérifiez que la vue contient les utilisateurs rendus
-    $this->assertSelectorTextContains('.user-list', 'john_doe');
-    $this->assertSelectorTextContains('.user-list', 'jane_doe');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Créer un utilisateur');
     }
 
-    public function testManageUsers2(): void
+    /**
+     * Test case to check if a new user can be successfully registered.
+     */
+    public function testNewUserRegistration()
     {
-        $this->client->request('GET', '/gestion_des_utilisateurs');
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);        
-        $this->client->followRedirect();
-        $this->assertRouteSame('app_login');
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/gestion_des_utilisateurs/nouvel_utilisateur');
+
+        $form = $crawler->selectButton('Inscription')->form();
+
+        // Fill in the form fields with the necessary data
+        $form['user_form[username]'] = 'test_user';
+        $form['user_form[plainPassword][first]'] = 'password123';
+        $form['user_form[plainPassword][second]'] = 'password123';
+        $form['user_form[email]'] = 'email@test.ts';
+        
+        $client->submit($form);
+
+        $this->assertResponseRedirects('/gestion_des_utilisateurs');
+        $client->followRedirect();
+
+        $this->assertSelectorTextContains('.flash-message', 'L\'utilisateur a bien été créé.');
     }
 
-    public function testRegister(): void
+
+    /**
+     * Helper method to create a test user.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @return \App\Entity\Users
+     */
+    private function createTestUser($entityManager)
     {
-        $this->client->request('GET', '/gestion_des_utilisateurs/nouvel_utilisateur');
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        $this->client->followRedirect();
-        $this->assertRouteSame('app_login');
+        $user = new \App\Entity\Users();
+        $user->setUsername('testuser');
+        $user->setPassword('testpassword');
+        $user->setEmail('testuser@example.com');
+        $user->setRoles(['ROLE_USER']);
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $user;
     }
 
-    public function testEditUser(): void
+
+    /**
+     * Test case to check if editing a user's profile is successful.
+     */
+    public function testEditUserProfile()
     {
-        $user = static::getContainer()->get('doctrine')->getRepository(Users::class)->findOneBy([]);
-        $this->client->request(Request::METHOD_GET, '/gestion_des_utilisateurs/modifier/' . $user->getUsername());
-        $this->assertResponseRedirects();
-        $this->client->followRedirect();
-        $this->assertRouteSame('app_login');
+        $client = static::createClient();
+        $user = $this->createTestUser($client->getContainer()->get('doctrine.orm.entity_manager')); // Create a test user for editing
+
+        $crawler = $client->request('GET', '/gestion_des_utilisateurs/modifier/' . $user->getUsername());
+
+        $form = $crawler->selectButton('Modifier les informations')->form();
+        // Modify the form data for editing
+        $form['user_form[username]'] = 'editeduser';
+
+        $client->submit($form);
+
+        $this->assertTrue($client->getResponse()->isRedirect('/gestion_des_utilisateurs'));
+        // Add assertions to check if the user's profile is successfully edited in the database
     }
 
-    public function testDeleteUser(): void
+
+    /**
+     * Test case to check if deleting a user is successful.
+     */
+    public function testDeleteUser()
     {
-        $user = static::getContainer()->get('doctrine')->getRepository(Users::class)->findOneBy([]);
-        $this->client->request(Request::METHOD_GET, '/gestion_des_utilisateurs/supprimer/' . $user->getUsername());
-        $this->assertResponseRedirects();
-        $this->client->followRedirect();
-        $this->assertRouteSame('app_login');
+        $client = static::createClient();
+        $user = $this->createTestUser($client->getContainer()->get('doctrine.orm.entity_manager')); // Create a test user for deletion
+
+        $client->request('GET', '/gestion_des_utilisateurs/supprimer/' . $user->getUsername());
+
+        $this->assertTrue($client->getResponse()->isRedirect('/gestion_des_utilisateurs'));
+        // Add assertions to check if the user is successfully deleted from the database
     }
 
-    // Ajoutez des tests supplémentaires pour la gestion des utilisateurs en fonction du contexte de connexion
-    // Enregistrement d'un nouvel utilisateur, modification d'un utilisateur, suppression d'un utilisateur, etc.
-    // Assurez-vous de tester différents scénarios possibles en fonction de l'état de connexion.
 }

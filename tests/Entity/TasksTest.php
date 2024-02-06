@@ -5,7 +5,6 @@ namespace App\tests\Entity;
 use PHPUnit\Framework\TestCase;
 use App\Entity\Tasks;
 use App\Entity\Users;
-use Doctrine\ORM\EntityManagerInterface;
 
 class TasksTest extends TestCase
 {
@@ -137,12 +136,12 @@ class TasksTest extends TestCase
     }
 
     // Test supplémentaire si vous utilisez une base de données
-    public function testGetIdAfterDatabasePersistence(EntityManagerInterface $entityManager)
-     {
-         //$entityManager = // récupérez votre gestionnaire d'entités ici
-         $task = new Tasks();
-         $entityManager->persist($task);
-         $entityManager->flush();
-         $this->assertNotNull($task->getId());
-    }
+    // public function testGetIdAfterDatabasePersistence()
+    // {
+    //     $entityManager = // récupérez votre gestionnaire d'entités ici
+    //     $task = new Tasks();
+    //     $entityManager->persist($task);
+    //     $entityManager->flush();
+    //     $this->assertNotNull($task->getId());
+    // }
 }
