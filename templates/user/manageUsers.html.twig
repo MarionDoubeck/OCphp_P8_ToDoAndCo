@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block hero %}
-Gestion des utilisateurs
+<h1>Gestion des utilisateurs</h1>
 {% endblock %}
 {% block body %}
 {% if not app.user or not is_granted('ROLE_ADMIN') %}
