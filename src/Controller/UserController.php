@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Users;
+use App\Entity\User;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
+/* use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted; */
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Security\UsersAuthenticator;
+use App\Security\UserAuthenticator;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -22,19 +23,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends AbstractController
 {
     /**
-     * Displays the page to manage the users.
+     * Displays the page to manage the User.
      *
      * @return Response
      */
-    #[Route('/gestion_des_utilisateurs', name: 'user_management')]
-    #[IsGranted('ROLE_ADMIN', message: "Espace réservé aux administrateurs.")]
-    public function manageUsers(
+    #[Route('/users', name: 'user_list')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function displayUserListAction(
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $users = $entityManager->getRepository(Users::class)->findAll();
-        return $this->render('user/manageUsers.html.twig', [
-            'users' => $users,
+        $Users = $entityManager->getRepository(User::class)->findAll();
+        return $this->render('user/list.html.twig', [
+            'users' => $Users,
         ]);
     }
 
@@ -43,20 +44,20 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    #[Route('/gestion_des_utilisateurs/nouvel_utilisateur', name: 'app_register')]
-    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    #[Route('/users/create', name: 'user_create')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function createUserAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        $user = new Users();
+        $user = new User();
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Encode the plain password.
+            // Encode the password.
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
             // Set roles.
@@ -71,24 +72,25 @@ class UserController extends AbstractController
             $entityManager->flush();
             
             $this->addFlash('success','L\'utilisateur a bien été créé.');
-            return $this->redirectToRoute('user_management');
+            return $this->redirectToRoute('user_list');
 
         }
 
         return $this->render('user/create.html.twig', [
-            'userForm' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
+
 
     /**
      * Displays the page for editing user data.
      *
      * @return Response
      */
-    #[Route('/gestion_des_utilisateurs/modifier/{username}', name: 'edit_user')]
-    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
-    public function edit(
-        Users $userToEdit, 
+    #[Route('/users/{id}/edit', name: 'user_edit')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function editUserAction(
+        User $userToEdit, 
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
         EntityManagerInterface $entityManager,
@@ -104,12 +106,12 @@ class UserController extends AbstractController
             if($form->get('email')->getData() && $form->get('email')->getData() !== $userToEdit->getEmail()){
                 $userToEdit->setEmail($form->get('email')->getData());
             }
-            if($form->get('plainPassword')->getData()){
-                // Encode the plain password.
+            if($form->get('password')->getData()){
+                // Encode the password.
                 $userToEdit->setPassword(
                     $userPasswordHasher->hashPassword(
                         $userToEdit,
-                        $form->get('plainPassword')->getData()
+                        $form->get('password')->getData()
                     )
                 );
             }
@@ -131,31 +133,13 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success','Le profil de ' . $userToEdit->getUsername() . ' a bien été modifié');
-            return $this->redirectToRoute('user_management');
+            return $this->redirectToRoute('user_list');
         }
         return $this->render('user/edit.html.twig', [
             'controller_name' => 'UserController',
-            'userToEdit' => $userToEdit,
-            'userForm' => $form->createView(),
+            'user' => $userToEdit,
+            'form' => $form->createView(),
         ]);
         
-    }
-
-    /**
-     * Displays the page for deleting user.
-     *
-     * @return Response
-     */
-    #[Route('/gestion_des_utilisateurs/supprimer/{username}', name: 'delete_user')]
-    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
-    public function deleteUser(
-        Users $userToDelete,
-        EntityManagerInterface $entityManager
-    ): RedirectResponse
-    {
-        $entityManager->remove($userToDelete);
-        $entityManager->flush();
-        $this->addFlash('success', 'L\'utilisateur ' . $userToDelete->getUsername() . ' a été supprimé avec succès');
-        return $this->redirectToRoute('user_management');
     }
 }

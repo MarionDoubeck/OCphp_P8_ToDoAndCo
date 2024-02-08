@@ -1,0 +1,83 @@
+
+html, body{
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+a, a:visited{
+    color: black;
+    text-decoration: none;
+}
+.icon.white{
+    width: 30px;
+    margin-right: 10px;
+}
+.navbar{
+    border-bottom: #FACF0F solid 3px;
+}
+.navbar-brand img{
+    width: 90px;
+    margin-left: 20px;
+}
+.menu{
+    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+}
+.menu>a{
+    margin-right: 40px;
+}
+.menu img{
+    width: 40px;
+}
+.hero{
+    background : #1090da;
+    color: #FACF0F !important;
+    padding: 40px;
+    text-align: center;
+    font-size: 2.2em;
+    line-height: 2em;
+    border-bottom: #FACF0F solid 3px;
+}
+.main-part{
+    box-sizing: border-box;
+    min-height : calc(100vh - 430px);
+    margin: 0;
+    padding: 50px;
+}
+footer{
+    border-top: #FACF0F solid 3px;
+    margin: 0;
+    height: 80px;
+    padding: 30px;
+    padding-left: 60px;
+}
+footer p{
+    font-size: 0.7rem;
+    margin-bottom: -20px;
+}
+footer img{
+    width: 40px;
+}
+.btn-todo{
+    background-color: #FACF0F;
+    color: #1090da !important;
+    width: 80px;
+}
+.btn-todo:hover{
+    border: 1px solid #FACF0F;
+}
+.btn-todo-danger{
+    background-color: red;
+    color: #FACF0F !important;
+    width: 85px;
+}
+.btn-todo-danger:hover{
+    border: 1px solid red;
+    color: red !important;
+}
+form ul li{
+    list-style-type: none;
+    color: red;
+}

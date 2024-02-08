@@ -1,18 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block hero %}
-Créer une nouvelle tâche
-{% endblock %}
 {% block body %}
-    {% if not app.user %}
-        Veuillez vous connecter pour pouvoir créer une tâche
-    {% else %}
-        {{ form_start(taskForm) }}
-            {{ form_row(taskForm.title) }}
-            {{ form_row(taskForm.content) }}
-            <div>
-                <button type="submit" class="btn btn-todo" style="width:200px !important">Créer la nouvelle tâche</button>
-            </div>
-        {{ form_end(taskForm) }}
-    {% endif %}
+    <div class="row">
+        {{ form_start(form, {'action' : path('task_create')}) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-success pull-right">Ajouter</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+    </div>
 {% endblock %}
