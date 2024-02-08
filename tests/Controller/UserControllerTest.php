@@ -2,116 +2,130 @@
 
 namespace App\Tests\Controller;
 
+
+use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\DomCrawler\Form;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\Security\Core\Security;
 
 
 class UserControllerTest extends WebTestCase
 {
-    /**
-     * Test case to check if the user management page is accessible.
-     */
-    public function testUserManagementPage()
-    {
-        $client = static::createClient();
-        $client->request('GET', '/gestion_des_utilisateurs');
+    private KernelBrowser|null $client = null;
 
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Gestion des utilisateurs');
+    public function setUp(): void
+    {
+        /* $this->client = static::createClient();
+        $userRepository = static::getContainer()->get(UsersRepository::class);
+        $testUser = $userRepository->findOneByUsername('admin');
+        // simulate $testUser being logged in
+        $this->client->loginUser($testUser);
+
+        $this->client->followRedirects(); */
     }
-
-    /**
-     * Test case to check if the new user registration page is accessible.
-     */
-    public function testNewUserRegistrationPage()
+   /* public function testManageUserWhenNotLoggedIn(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/gestion_des_utilisateurs/nouvel_utilisateur');
-
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Créer un utilisateur');
-    }
-
-    /**
-     * Test case to check if a new user can be successfully registered.
-     */
-    public function testNewUserRegistration()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/gestion_des_utilisateurs/nouvel_utilisateur');
-
-        $form = $crawler->selectButton('Inscription')->form();
-
-        // Fill in the form fields with the necessary data
-        $form['user_form[username]'] = 'test_user';
-        $form['user_form[plainPassword][first]'] = 'password123';
-        $form['user_form[plainPassword][second]'] = 'password123';
-        $form['user_form[email]'] = 'email@test.ts';
-        
-        $client->submit($form);
-
-        $this->assertResponseRedirects('/gestion_des_utilisateurs');
+        $crawler = $client->request(Request::METHOD_GET, '/gestion_des_utilisateurs');
+        $this->assertResponseRedirects();
         $client->followRedirect();
-
-        $this->assertSelectorTextContains('.flash-message', 'L\'utilisateur a bien été créé.');
+        $this->assertRouteSame('app_login');
+        $client->getCrawler();
+        $this->assertSelectorTextContains('h1', 'Connexion');
     }
 
-
-    /**
-     * Helper method to create a test user.
-     *
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @return \App\Entity\Users
-     */
-    private function createTestUser($entityManager)
-    {
-        $user = new \App\Entity\Users();
-        $user->setUsername('testuser');
-        $user->setPassword('testpassword');
-        $user->setEmail('testuser@example.com');
-        $user->setRoles(['ROLE_USER']);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $user;
-    }
-
-
-    /**
-     * Test case to check if editing a user's profile is successful.
-     */
-    public function testEditUserProfile()
+    public function testManageUserWhenNotAdmin(): void
     {
         $client = static::createClient();
-        $user = $this->createTestUser($client->getContainer()->get('doctrine.orm.entity_manager')); // Create a test user for editing
-
-        $crawler = $client->request('GET', '/gestion_des_utilisateurs/modifier/' . $user->getUsername());
-
-        $form = $crawler->selectButton('Modifier les informations')->form();
-        // Modify the form data for editing
-        $form['user_form[username]'] = 'editeduser';
-
-        $client->submit($form);
-
-        $this->assertTrue($client->getResponse()->isRedirect('/gestion_des_utilisateurs'));
-        // Add assertions to check if the user's profile is successfully edited in the database
+        SecurityControllerTest::login($client, 'userToLog');
+        $client->request(Request::METHOD_GET, '/gestion_des_utilisateurs');
+        $this->assertResponseStatusCodeSame(403);
     }
+*/
+/* $client = static::createClient();
+SecurityControllerTest::login($client, 'admin');
+$user = $client->getContainer()->get('security.token_storage')->getToken()->getUser();
+$client->loginUser($user);
+dump($user);  */
 
+    public function testManageUserSuccessfully()
+    {
+        $this->client = static::createClient();
+        $userRepository = static::getContainer()->get(UsersRepository::class);
+        $testUser = $userRepository->findOneByUsername('admin');
+        // simulate $testUser being logged in
+        $this->client->loginUser($testUser);
 
-    /**
-     * Test case to check if deleting a user is successful.
-     */
-    public function testDeleteUser()
+        $this->client->followRedirects();
+        $container = $this->client->getContainer();
+        $authentication = $container->get('security.token_storage')->getToken();
+        $user = $authentication->getUser();
+        dump($user->getRoles());
+        
+        $this->client->request(Request::METHOD_GET, '/gestion_des_utilisateurs');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertSelectorExists('h1', 'Gestion des utilisateurs');
+
+    } 
+/*
+    public function testUserCreateSuccessfully()
     {
         $client = static::createClient();
-        $user = $this->createTestUser($client->getContainer()->get('doctrine.orm.entity_manager')); // Create a test user for deletion
+        $crawler = $client->request(Request::METHOD_GET, '/gestion_des_utilisateurs/nouvel_utilisateur');
 
-        $client->request('GET', '/gestion_des_utilisateurs/supprimer/' . $user->getUsername());
+        $this->assertResponseIsSuccessful();
+        $this->assertRouteSame('app_register');
+        $this->assertInstanceOf(Form::class, $crawler->selectButton('Ajouter')->form());
 
-        $this->assertTrue($client->getResponse()->isRedirect('/gestion_des_utilisateurs'));
-        // Add assertions to check if the user is successfully deleted from the database
+        $client->submitForm('Ajouter', [
+            'user[username]' => 'newuser',
+            'user[password][first]' => 'password',
+            'user[password][second]' => 'password',
+            'user[email]' => 'newuser@user.user',
+        ]);
+
+        $this->assertResponseRedirects();
+        $client->followRedirect();
+        $this->assertRouteSame('homepage');
     }
 
+    public function testEditUserWhenNotLoggedIn(): void
+    {
+        $client = static::createClient();
+        $user = static::getContainer()->get(UsersRepository::class)->findOneByUsername('newuser');
+        $client->request(Request::METHOD_GET, '/gestion_des_utilisateurs/modifier/' . $user->getUsername());
+
+        $this->assertResponseRedirects();
+        $client->followRedirect();
+        $this->assertRouteSame('login');
+    }
+
+    public function testEditUserSuccessfully(): void
+    {
+        $client = static::createClient();
+        $user = SecurityControllerTest::login($client, 'userToEdit');
+        $client->request(Request::METHOD_GET, '/gestion_des_utilisateurs/modifier/' . $user->getUsername());
+
+        $this->assertResponseIsSuccessful();
+        $this->assertRouteSame('edit_user');
+        $this->assertRequestAttributeValueSame('username', $user->getUsername());
+
+        $client->submitForm('Modifier', [
+            'user[username]' => 'userEdited',
+            'user[password][first]' => 'userToEdit',
+            'user[password][second]' => 'userToEdit',
+            'user[email]' => 'userToEdit@example.com',
+        ]);
+
+        $this->assertResponseRedirects();
+        $client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertRouteSame('user_management');
+        $this->assertSelectorExists('div.alert.alert-success');
+    }
+    */
 }

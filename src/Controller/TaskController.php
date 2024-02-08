@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\TaskFormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 /**
@@ -78,6 +79,7 @@ class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/liste_des_taches', name: 'todolist')]
+    #[IsGranted('ROLE_USER')]
     public function todoList(
         EntityManagerInterface $entityManager,
     ): Response
@@ -89,6 +91,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/liste_des_taches_terminees', name: 'donelist')]
+    #[IsGranted('ROLE_USER')]
     public function doneList(
         EntityManagerInterface $entityManager,
     ): Response
@@ -100,6 +103,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/nouvelle_tache', name: 'create_task')]
+    #[IsGranted('ROLE_USER')]
     public function createTask(
         EntityManagerInterface $entityManager,
         Request $request,
@@ -110,6 +114,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/modifier/{title}', name: 'edit_task')]
+    #[IsGranted('ROLE_USER')]
     public function edit(
         Tasks $taskToEdit, 
         Request $request,
@@ -131,6 +136,7 @@ class TaskController extends AbstractController
      * @return RedirectResponse Redirects to the appropriate task list view after toggling the task status.
      */
     #[Route('/status/{title}', name: 'toggle_task', methods: ["POST", "GET"])]
+    #[IsGranted('ROLE_USER')]
     public function toggle(
         Tasks $task,
         EntityManagerInterface $entityManager
@@ -147,6 +153,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/supprimer/{title}', name: 'delete_task')]
+    #[IsGranted('ROLE_USER')]
     public function delete(
         Tasks $taskToDelete,
         EntityManagerInterface $entityManager

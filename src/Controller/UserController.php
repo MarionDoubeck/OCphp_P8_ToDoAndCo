@@ -7,14 +7,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
-/* use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted; */
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Security\UsersAuthenticator;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for user-related actions.
@@ -28,6 +27,7 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/gestion_des_utilisateurs', name: 'user_management')]
+    #[IsGranted('ROLE_ADMIN', message: "Espace réservé aux administrateurs.")]
     public function manageUsers(
         EntityManagerInterface $entityManager,
     ): Response
@@ -44,6 +44,7 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/gestion_des_utilisateurs/nouvel_utilisateur', name: 'app_register')]
+    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
@@ -85,6 +86,7 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/gestion_des_utilisateurs/modifier/{username}', name: 'edit_user')]
+    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
     public function edit(
         Users $userToEdit, 
         Request $request, 
@@ -145,6 +147,7 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/gestion_des_utilisateurs/supprimer/{username}', name: 'delete_user')]
+    #[IsGranted('ROLE_ADMIN',  message: "Espace réservé aux administrateurs.")]
     public function deleteUser(
         Users $userToDelete,
         EntityManagerInterface $entityManager
