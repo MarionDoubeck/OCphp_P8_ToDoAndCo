@@ -2,21 +2,21 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Tasks;
+use App\Entity\Task;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker;
 
-class TasksFixtures extends Fixture implements DependentFixtureInterface
+class TaskFixtures extends Fixture implements DependentFixtureInterface
 {
 
 
     /**
      * Load dummy task data into the database.
      *
-     * This function generates fake task data to simulate the addition of tasks.
-     * Tasks titles, contents, authors, creationDate, and isDone are randomized.
+     * This function generates fake task data to simulate the addition of task.
+     * Task titles, contents, authors, creationDate, and isDone are randomized.
      *
      * @param ObjectManager $manager The entity manager to persist the data.
      * 
@@ -27,7 +27,7 @@ class TasksFixtures extends Fixture implements DependentFixtureInterface
         $faker = Faker\Factory::create('fr_FR');
 
         for ($tsk = 1 ; $tsk <= 25 ; $tsk++) {
-            $task = new Tasks();
+            $task = new Task();
             $task->setTitle($faker->text(rand(5,25)));
             $task->setContent($faker->text(rand(30,150)));
             $task->setCreatedAt(new \DateTimeImmutable());
@@ -56,7 +56,7 @@ class TasksFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies():array
     {
         return [
-            UsersFixtures::class
+            UserFixtures::class
         ];
     }//end getDependencies()
 

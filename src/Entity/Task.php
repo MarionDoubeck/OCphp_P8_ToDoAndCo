@@ -2,34 +2,32 @@
 
 namespace App\Entity;
 
-use App\Repository\TasksRepository;
+use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TasksRepository::class)]
-class Tasks
+#[ORM\Entity(repositoryClass: TaskRepository::class)]
+class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(options:['default'=>'CURRENT_TIMESTAMP'])]
-    /** @var \DateTimeImmutable|null The date and time when the task was created */
-    private ?\DateTimeImmutable $created_at = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?bool $isDone = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Users $author= null;
+    private ?User $author = null;
 
     public function getId(): ?int
     {
@@ -53,7 +51,7 @@ class Tasks
         return $this->content;
     }
 
-    public function setContent(?string $content): static
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
@@ -62,17 +60,17 @@ class Tasks
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function isDone(): ?bool
+    public function isIsDone(): ?bool
     {
         return $this->isDone;
     }
@@ -89,13 +87,12 @@ class Tasks
         $this->isDone = $flag;
     }
 
-
-    public function getAuthor(): ?Users
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?Users $author): static
+    public function setAuthor(?User $author): static
     {
         $this->author = $author;
 

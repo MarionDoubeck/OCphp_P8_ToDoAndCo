@@ -2,21 +2,21 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Users;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Faker;
 
-class UsersFixtures extends Fixture
+class UserFixtures extends Fixture
 {
     /** @var int $counter Counter for tracking iterations. */
     private $counter = 1;
 
 
     /**
-     * UsersFixtures constructor.
+     * UserFixtures constructor.
      *
      * @param UserPasswordHasherInterface $passwordEncoder Password hasher for encoding user passwords.
      * @param SluggerInterface            $slugger         Slugger for generating slugs.
@@ -42,7 +42,7 @@ class UsersFixtures extends Fixture
         $faker = Faker\Factory::create('fr_FR');
 
         for ($usr = 1 ; $usr <= 9 ; $usr++) {
-            $user = new Users();
+            $user = new User();
             $user->setUserName($faker->userName);
             $roles = $faker->randomElement([
                 ['ROLE_USER'],
@@ -60,7 +60,7 @@ class UsersFixtures extends Fixture
             $this->counter++;
         }
         //User_10 is me.
-        $dev = new Users();
+        $dev = new User();
         $dev->setUserName('marion');
         $dev->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
         $dev->setPassword(
@@ -72,7 +72,7 @@ class UsersFixtures extends Fixture
         $this->counter++;
 
         //User_11 is 'Anonymus'.
-        $anonymus = new Users();
+        $anonymus = new User();
         $anonymus->setUserName('Anonymus');
         $anonymus->setRoles(['ROLE_USER']);
         $anonymus->setPassword(

@@ -2,121 +2,92 @@
 
 namespace App\Controller;
 
-use App\Entity\Tasks;
-use App\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Task;
 use App\Form\TaskFormType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
-/**
- * Controller for task-related actions.
- */
 class TaskController extends AbstractController
 {
-
     /**
-     * Process the form for adding or editing a trick.
+     * Displays the page to see the tasks.
      *
-     * @param Task $task The task entity.
-     * @param Request $request The HTTP request.
-     * @param EntityManagerInterface $em The entity manager.
-     * @param bool $isEdit Indicates whether it's an edit operation.
-     * 
      * @return Response
      */
-    private function processTrickForm(
-        Tasks $task, 
-        Request $request,
+    #[Route('/tasks', name: 'task_list')]
+    public function displayTaskListAction(
         EntityManagerInterface $entityManager,
-        bool $isEdit = false
     ): Response
     {
+        $Tasks = $entityManager->getRepository(Task::class)->findAll();
+        return $this->render('task/list.html.twig', [
+            'tasks' => $Tasks,
+        ]);
+    }
+
+    /**
+     * Create a new task
+     *
+     * @return Response
+     */
+    #[Route('/tasks/create', name: 'task_create')]
+    public function createTaskAction(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $task = new Task();
         $form = $this->createForm(TaskFormType::class, $task);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            if (! $isEdit){
             $task->setAuthor($this->getUser());
             $task->setIsDone(false);
             $task->setCreatedAt(new \DateTimeImmutable);
             $entityManager->persist($task);
             $entityManager->flush();
-            $this->addFlash('success','Votre tâche à bien été ajoutée');
-            return $this->redirectToRoute('todolist');
-            } else {
-                $entityManager->persist($task);
-                $entityManager->flush();
-                $this->addFlash('success','Votre tâche à bien été modifiée');
-                if ($task->isDone()) {
-                    return $this->redirectToRoute('donelist');
-                } else {
-                    return $this->redirectToRoute('todolist');
-                }
-            }
+
+            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+
+            return $this->redirectToRoute('task_list');
         }
 
-        if(! $isEdit){
-            return $this->render('task/create.html.twig', [
-                'taskForm' => $form->createView(),
-            ]);
-        }else{
-            return $this->render('task/edit.html.twig', [
-                'taskForm' => $form->createView(),
-                'task' => $task,
-            ]);
-        }
+        return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
 
     /**
-     * Displays the page to manage the users.
+     * Edit a task
      *
      * @return Response
      */
-    #[Route('/liste_des_taches', name: 'todolist')]
-    public function todoList(
-        EntityManagerInterface $entityManager,
-    ): Response
+    #[Route('/tasks/{id}/edit', name: 'task_edit')]
+    public function editTaskAction(Task $taskToEdit, Request $request, EntityManagerInterface $entityManager)
     {
-        $tasksToDo = $entityManager->getRepository(Tasks::class)->findTasksNotDone();
-        return $this->render('task/todolist.html.twig', [
-            'tasksToDo' => $tasksToDo,
-        ]);
-    }
+        $connectedUser = $this->getUser();
+        if($connectedUser === $taskToEdit->getAuthor()){
+            $form = $this->createForm(TaskFormType::class, $taskToEdit);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                
+                    $entityManager->persist($taskToEdit);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-    #[Route('/liste_des_taches_terminees', name: 'donelist')]
-    public function doneList(
-        EntityManagerInterface $entityManager,
-    ): Response
-    {
-        $doneTasks = $entityManager->getRepository(Tasks::class)->findTasksDone();
-        return $this->render('task/donelist.html.twig', [
-            'doneTasks' => $doneTasks,
-        ]);
-    }
-
-    #[Route('/nouvelle_tache', name: 'create_task')]
-    public function createTask(
-        EntityManagerInterface $entityManager,
-        Request $request,
-    ): Response
-    {
-        $newTask = new Tasks;
-        return $this -> processTrickForm($newTask, $request, $entityManager, false);
-    }
-
-    #[Route('/modifier/{title}', name: 'edit_task')]
-    public function edit(
-        Tasks $taskToEdit, 
-        Request $request,
-        EntityManagerInterface $entityManager,
-    ): Response
-    {
-        return $this -> processTrickForm($taskToEdit, $request, $entityManager, true);
+                    return $this->redirectToRoute('task_list');
+                
+                
+            }
+            return $this->render('task/edit.html.twig', [
+                'form' => $form->createView(),
+                'task' => $taskToEdit,
+            ]);
+        } else {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à modifier cette tâche');
+            return $this->redirectToRoute('task_list');
+        }
     }
 
 
@@ -130,37 +101,36 @@ class TaskController extends AbstractController
      *
      * @return RedirectResponse Redirects to the appropriate task list view after toggling the task status.
      */
-    #[Route('/status/{title}', name: 'toggle_task', methods: ["POST", "GET"])]
-    public function toggle(
-        Tasks $task,
-        EntityManagerInterface $entityManager
-    ): RedirectResponse
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ["POST", "GET"])]
+    public function toggleTaskAction(Task $task, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $task->toggle(!$task->isDone());
+        $task->toggle(!$task->isIsDone());
         $entityManager->flush();
-        $this->addFlash('success', 'le status de ' . $task->getTitle() . ' a été modifié avec succès');
-        if ($task->isDone()) {
-            return $this->redirectToRoute('todolist');
-        } else {
-            return $this->redirectToRoute('donelist');
+
+        if ($task->isIsDone()) {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        }else{
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle())); 
         }
+
+        return $this->redirectToRoute('task_list');
     }
 
-    #[Route('/supprimer/{title}', name: 'delete_task')]
-    public function delete(
-        Tasks $taskToDelete,
-        EntityManagerInterface $entityManager
-    ): RedirectResponse
+
+    #[Route('/tasks/{id}/delete', name: 'task_delete')]
+    public function deleteTaskAction(Task $taskToDelete,EntityManagerInterface $entityManager): RedirectResponse
     {
         $connectedUser = $this->getUser();
         if($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) && 'Anonymus' === $taskToDelete->getAuthor()->getUsername())){
             $entityManager->remove($taskToDelete);
             $entityManager->flush();
-            $this->addFlash('success', $taskToDelete->getTitle() . ' a été supprimé avec succès');
-            return $this->redirectToRoute('todolist');
+
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+            return $this->redirectToRoute('task_list');
         } else {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à supprimer cette tâche');
-            return $this->redirectToRoute('todolist');
+            return $this->redirectToRoute('task_list');
         }
     }
 }

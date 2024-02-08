@@ -1,20 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block hero %}
-Modifier une tâche
-{% endblock %}
 {% block body %}
-    {% if not app.user %}
-        Veuillez vous connecter pour pouvoir créer une tâche
-    {% elseif app.user != task.author %}
-        Seul l'auteur de cette tâche peut la modifier
-    {% else %}
-        {{ form_start(taskForm) }}
-            {{ form_row(taskForm.title) }}
-            {{ form_row(taskForm.content) }}
-            <div>
-                <button type="submit" class="btn btn-todo" style="width:200px !important">Enregistrer les modifications</button>
-            </div>
-        {{ form_end(taskForm) }}
-    {% endif %}
+    <div class="row">
+        {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-success pull-right">Modifier</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

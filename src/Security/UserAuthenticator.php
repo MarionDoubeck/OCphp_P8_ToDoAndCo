@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class UsersAuthenticator extends AbstractLoginFormAuthenticator
+class UserAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
@@ -49,7 +49,7 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // For example:
-        return new RedirectResponse($this->urlGenerator->generate('app_main'));
+         return new RedirectResponse($this->urlGenerator->generate('app_main'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
