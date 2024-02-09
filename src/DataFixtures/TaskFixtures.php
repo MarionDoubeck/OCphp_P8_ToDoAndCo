@@ -7,8 +7,9 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class TaskFixtures extends Fixture implements DependentFixtureInterface
+class TaskFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
 
 
@@ -60,4 +61,9 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         ];
     }//end getDependencies()
 
+
+    public static function getGroups(): array
+    {
+        return ['groupApp'];
+    }
 }
