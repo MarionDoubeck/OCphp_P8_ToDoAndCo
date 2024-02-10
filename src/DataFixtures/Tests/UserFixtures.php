@@ -56,6 +56,14 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $user5->setEmail('fakeusertodelete@fake.fk');
         $manager->persist($user5);
 
+        $user6 = new User();
+        $user6->setUserName('authorOfTasks');
+        $user6->setRoles(['ROLE_USER']);
+        $user6->setPassword('user');
+        $user6->setEmail('fakeAuthor@fake.fk');
+        $manager->persist($user6);
+        $this->addReference('author_of_tasks', $user6);
+
         $manager->flush();
 
     }//end load()

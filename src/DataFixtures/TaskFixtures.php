@@ -35,7 +35,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $task->setIsDone($faker->boolean);
             //Half tasks related to 'Anonymus' who is user_11.
             if(rand(0,1) >= 1){
-                $user = $this->getReference('user_11');
+                $user = null;
             } else{
                 $user = $this->getReference('user_'.rand(1,10));
             }

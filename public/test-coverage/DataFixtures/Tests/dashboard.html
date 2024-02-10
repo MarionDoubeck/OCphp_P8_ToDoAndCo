@@ -2,12 +2,12 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for /Users/mariondoubeck/Documents/openclassrooms/PHP_symfony/P8-todo/toDoAndCoApp/src/Security</title>
+  <title>Dashboard for /Users/mariondoubeck/Documents/openclassrooms/PHP_symfony/P8-todo/toDoAndCoApp/src/DataFixtures/Tests</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../_css/bootstrap.min.css?v=9.2.30" rel="stylesheet" type="text/css">
-  <link href="../_css/nv.d3.min.css?v=9.2.30" rel="stylesheet" type="text/css">
-  <link href="../_css/style.css?v=9.2.30" rel="stylesheet" type="text/css">
-  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+  <link href="../../_css/bootstrap.min.css?v=9.2.30" rel="stylesheet" type="text/css">
+  <link href="../../_css/nv.d3.min.css?v=9.2.30" rel="stylesheet" type="text/css">
+  <link href="../../_css/style.css?v=9.2.30" rel="stylesheet" type="text/css">
+  <link href="../../_css/custom.css" rel="stylesheet" type="text/css">
  </head>
  <body>
   <header>
@@ -16,8 +16,9 @@
      <div class="col-md-12">
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
-         <li class="breadcrumb-item"><a href="../index.html">/Users/mariondoubeck/Documents/openclassrooms/PHP_symfony/P8-todo/toDoAndCoApp/src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Security</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">/Users/mariondoubeck/Documents/openclassrooms/PHP_symfony/P8-todo/toDoAndCoApp/src</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">DataFixtures</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Tests</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -58,7 +59,8 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserAuthenticator.php.html#19">App\Security\UserAuthenticator</a></td><td class="text-right">13%</td></tr>
+       <tr><td><a href="TaskFixtures.php.html#11">App\DataFixtures\Tests\TaskFixtures</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserFixtures.php.html#10">App\DataFixtures\Tests\UserFixtures</a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -75,7 +77,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserAuthenticator.php.html#19">App\Security\UserAuthenticator</a></td><td class="text-right">21</td></tr>
 
        </tbody>
       </table>
@@ -113,8 +114,11 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserAuthenticator.php.html#29"><abbr title="App\Security\UserAuthenticator::authenticate">authenticate</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="UserAuthenticator.php.html#45"><abbr title="App\Security\UserAuthenticator::onAuthenticationSuccess">onAuthenticationSuccess</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TaskFixtures.php.html#22"><abbr title="App\DataFixtures\Tests\TaskFixtures::load">load</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TaskFixtures.php.html#75"><abbr title="App\DataFixtures\Tests\TaskFixtures::getDependencies">getDependencies</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TaskFixtures.php.html#83"><abbr title="App\DataFixtures\Tests\TaskFixtures::getGroups">getGroups</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserFixtures.php.html#19"><abbr title="App\DataFixtures\Tests\UserFixtures::load">load</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserFixtures.php.html#72"><abbr title="App\DataFixtures\Tests\UserFixtures::getGroups">getGroups</abbr></a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -131,7 +135,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="UserAuthenticator.php.html#45"><abbr title="App\Security\UserAuthenticator::onAuthenticationSuccess">onAuthenticationSuccess</abbr></a></td><td class="text-right">6</td></tr>
 
        </tbody>
       </table>
@@ -145,9 +148,9 @@
     </p>
    </footer>
   </div>
-  <script src="../_js/jquery.min.js?v=9.2.30" type="text/javascript"></script>
-  <script src="../_js/d3.min.js?v=9.2.30" type="text/javascript"></script>
-  <script src="../_js/nv.d3.min.js?v=9.2.30" type="text/javascript"></script>
+  <script src="../../_js/jquery.min.js?v=9.2.30" type="text/javascript"></script>
+  <script src="../../_js/d3.min.js?v=9.2.30" type="text/javascript"></script>
+  <script src="../../_js/nv.d3.min.js?v=9.2.30" type="text/javascript"></script>
   <script type="text/javascript">
 $(document).ready(function() {
   nv.addGraph(function() {
@@ -160,7 +163,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,1,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .datum(getCoverageDistributionData([2,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -178,7 +181,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([2,0,0,0,0,0,0,0,0,0,0,2], "Method Coverage"))
+      .datum(getCoverageDistributionData([5,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -228,7 +231,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[13.333333333333334,5,"<a href=\"UserAuthenticator.php.html#19\">App\\Security\\UserAuthenticator<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[0,3,"<a href=\"TaskFixtures.php.html#11\">App\\DataFixtures\\Tests\\TaskFixtures<\/a>"],[0,2,"<a href=\"UserFixtures.php.html#10\">App\\DataFixtures\\Tests\\UserFixtures<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -252,7 +255,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"UserAuthenticator.php.html#25\">App\\Security\\UserAuthenticator::__construct<\/a>"],[0,1,"<a href=\"UserAuthenticator.php.html#29\">App\\Security\\UserAuthenticator::authenticate<\/a>"],[0,2,"<a href=\"UserAuthenticator.php.html#45\">App\\Security\\UserAuthenticator::onAuthenticationSuccess<\/a>"],[100,1,"<a href=\"UserAuthenticator.php.html#56\">App\\Security\\UserAuthenticator::getLoginUrl<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[0,1,"<a href=\"TaskFixtures.php.html#22\">App\\DataFixtures\\Tests\\TaskFixtures::load<\/a>"],[0,1,"<a href=\"TaskFixtures.php.html#75\">App\\DataFixtures\\Tests\\TaskFixtures::getDependencies<\/a>"],[0,1,"<a href=\"TaskFixtures.php.html#83\">App\\DataFixtures\\Tests\\TaskFixtures::getGroups<\/a>"],[0,1,"<a href=\"UserFixtures.php.html#19\">App\\DataFixtures\\Tests\\UserFixtures::load<\/a>"],[0,1,"<a href=\"UserFixtures.php.html#72\">App\\DataFixtures\\Tests\\UserFixtures::getGroups<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);

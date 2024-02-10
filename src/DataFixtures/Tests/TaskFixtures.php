@@ -34,7 +34,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $task2->setContent('taskToEdit');
         $task2->setCreatedAt(new \DateTimeImmutable());
         $task2->setIsDone(false);
-        $task2->setAuthor($this->getReference('user_to_log'));
+        $task2->setAuthor($this->getReference('author_of_tasks'));
         $manager->persist($task2);
 
         $task3 = new Task();
@@ -42,7 +42,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $task3->setContent('taskToDelete');
         $task3->setCreatedAt(new \DateTimeImmutable());
         $task3->setIsDone(false);
-        $task3->setAuthor($this->getReference('user_to_log'));
+        $task3->setAuthor($this->getReference('author_of_tasks'));
         $manager->persist($task3);
 
         $task4 = new Task();
@@ -50,7 +50,6 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $task4->setContent('taskAnonymusToDelete');
         $task4->setCreatedAt(new \DateTimeImmutable());
         $task4->setIsDone(false);
-        $task4->setAuthor($this->getReference('anonymus'));
         $manager->persist($task4);
 
         $task5 = new Task();
