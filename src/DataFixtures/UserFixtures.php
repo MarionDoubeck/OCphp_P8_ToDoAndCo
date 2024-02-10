@@ -6,10 +6,10 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Faker;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements FixtureGroupInterface
 {
     /** @var int $counter Counter for tracking iterations. */
     private $counter = 1;
@@ -19,11 +19,9 @@ class UserFixtures extends Fixture
      * UserFixtures constructor.
      *
      * @param UserPasswordHasherInterface $passwordEncoder Password hasher for encoding user passwords.
-     * @param SluggerInterface            $slugger         Slugger for generating slugs.
      */
     public function __construct(
-        private UserPasswordHasherInterface $passwordEncoder,
-        private SluggerInterface $slugger
+        private UserPasswordHasherInterface $passwordEncoder
     ) {
     }//end __construct()
 
@@ -87,4 +85,9 @@ class UserFixtures extends Fixture
 
     }//end load()
 
+
+    public static function getGroups(): array
+    {
+        return ['groupApp'];
+    }
 }

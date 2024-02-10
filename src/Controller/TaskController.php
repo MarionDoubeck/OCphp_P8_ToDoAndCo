@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TaskController extends AbstractController
 {
@@ -35,6 +36,7 @@ class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/tasks/create', name: 'task_create')]
+    #[IsGranted('ROLE_USER')]
     public function createTaskAction(Request $request, EntityManagerInterface $entityManager): Response
     {
         $task = new Task();
@@ -64,6 +66,7 @@ class TaskController extends AbstractController
      * @return Response
      */
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
+    #[IsGranted('ROLE_USER')]
     public function editTaskAction(Task $taskToEdit, Request $request, EntityManagerInterface $entityManager)
     {
         $connectedUser = $this->getUser();
@@ -102,6 +105,7 @@ class TaskController extends AbstractController
      * @return RedirectResponse Redirects to the appropriate task list view after toggling the task status.
      */
     #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ["POST", "GET"])]
+    #[IsGranted('ROLE_USER')]
     public function toggleTaskAction(Task $task, EntityManagerInterface $entityManager): RedirectResponse
     {
         $task->toggle(!$task->isIsDone());
@@ -118,10 +122,11 @@ class TaskController extends AbstractController
 
 
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
+    #[IsGranted('ROLE_USER')]
     public function deleteTaskAction(Task $taskToDelete,EntityManagerInterface $entityManager): RedirectResponse
     {
         $connectedUser = $this->getUser();
-        if($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) && 'Anonymus' === $taskToDelete->getAuthor()->getUsername())){
+        if($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) && null === $taskToDelete->getAuthor())){
             $entityManager->remove($taskToDelete);
             $entityManager->flush();
 
