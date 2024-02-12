@@ -9,6 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
+/**
+ * Represents a user entity.
+ *
+ * This entity class defines the properties and behaviors of a user in the application.
+ * It is mapped to the database table corresponding to the User entity.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -40,16 +47,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tasks = new ArrayCollection();
     }
 
+
+    /**
+     * Gets the ID of the user.
+     *
+     * @return int|null The ID of the user.
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+
+    /**
+     * Gets the username of the user.
+     *
+     * @return string|null The username of the user.
+     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
+
+    /**
+     * Sets the username of the user.
+     *
+     * @param string $username The username of the user.
+     *
+     * @return static The updated User entity.
+     */
     public function setUsername(string $username): static
     {
         $this->username = $username;
@@ -57,8 +84,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
-     * A visual identifier that represents this user.
+     * Returns a visual identifier that represents this user.
+     *
+     * @return string The user identifier.
      *
      * @see UserInterface
      */
@@ -67,7 +97,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->username;
     }
 
+
     /**
+     * Gets the roles of the user.
+     *
+     * @return array The roles of the user.
+     *
      * @see UserInterface
      */
     public function getRoles(): array
@@ -79,6 +114,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+
+    /**
+     * Sets the roles of the user.
+     *
+     * @param array $roles The roles of the user.
+     *
+     * @return static The updated User entity.
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -86,14 +129,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * Gets the hashed password of the user.
+     *
+     * @return string The hashed password of the user.
      */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+
+    /**
+     * Sets the hashed password of the user.
+     *
+     * @param string $password The hashed password of the user.
+     *
+     * @return static The updated User entity.
+     */
     public function setPassword(string $password): static
     {
         $this->password = $password;
@@ -101,20 +155,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     /**
-     * @see UserInterface
+     * Erases the user's credentials.
+     *
+     * This method should clear any sensitive data stored temporarily on the user.
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // If you store any temporary, sensitive data on the user, clear it here.
         // $this->plainPassword = null;
     }
 
+
+    /**
+     * Gets the email of the user.
+     *
+     * @return string|null The email of the user.
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+
+    /**
+     * Sets the email of the user.
+     *
+     * @param string $email The email of the user.
+     *
+     * @return static The updated User entity.
+     */
     public function setEmail(string $email): static
     {
         $this->email = $email;
@@ -122,5 +193,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-   
+
+    /**
+     * Gets the tasks associated with the user.
+     *
+     * @return Collection<int, Task> The tasks associated with the user.
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
 }

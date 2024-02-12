@@ -14,12 +14,13 @@
                     </h4>
                     <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
                     {% if task.author %}
-                    <span>Par {{ task.author.username }}</span>
+                    <span class="fst-italic">Par {{ task.author.username }}</span>
                     {% else %}
-                    <span>Auteur anonyme</span>
+                    <span class="fst-italic">Auteur anonyme</span>
                     {% endif %}
                     <p>{{ task.content }}</p>
                 </div>
+                {% if app.user == task.author or (is_granted('ROLE_ADMIN') and task.author == null) %}
                 <div>
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
                         <button class="btn btn-success btn-sm pull-right">
@@ -27,9 +28,10 @@
                         </button>
                     </form>
                     <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+                        <button class="btn btn-danger btn-sm pull-right" onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">Supprimer</button>
                     </form>
                 </div>
+                {% endif %}
             </div>
         </div>
         {% else %}

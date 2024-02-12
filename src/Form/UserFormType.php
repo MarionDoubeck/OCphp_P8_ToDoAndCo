@@ -10,8 +10,23 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+
+/**
+ * Form type for creating or editing a user.
+ *
+ * This form type class defines the structure of the form used for creating or editing users.
+ */
 class UserFormType extends AbstractType
 {
+
+    /**
+     * Builds the form.
+     *
+     * This method is responsible for configuring the form fields and their options.
+     *
+     * @param FormBuilderInterface $builder The form builder.
+     * @param array $options The options for configuring the form.
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -34,4 +49,5 @@ class UserFormType extends AbstractType
             ])
         ;
     }
+
 }

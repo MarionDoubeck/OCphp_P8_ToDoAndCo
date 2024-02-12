@@ -14,26 +14,62 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TaskController extends AbstractController
 {
+
     /**
-     * Displays the page to see the tasks.
+     * Displays the page to see the to-do tasks.
      *
-     * @return Response
+     * @param EntityManagerInterface $entityManager The entity manager to fetch tasks.
+     *
+     * @return Response The response containing the rendered list of to-do tasks.
      */
-    #[Route('/tasks', name: 'task_list')]
-    public function displayTaskListAction(
+    #[Route('/tasks', name: 'todo_task_list')]
+    public function displayTodoTaskListAction(
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $Tasks = $entityManager->getRepository(Task::class)->findAll();
+        $tasks = $entityManager->getRepository(Task::class)
+        ->createQueryBuilder('t')
+        ->where('t.isDone = :isDone')
+        ->setParameter('isDone', false)
+        ->getQuery()
+        ->getResult();
         return $this->render('task/list.html.twig', [
-            'tasks' => $Tasks,
+            'tasks' => $tasks,
         ]);
     }
 
+
     /**
-     * Create a new task
+     * Displays the page to see the done tasks.
      *
-     * @return Response
+     * @param EntityManagerInterface $entityManager The entity manager to fetch tasks.
+     *
+     * @return Response The response containing the rendered list of done tasks.
+     */
+    #[Route('/tasks/done', name: 'done_task_list')]
+    public function displayDoneTaskListAction(
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $tasks = $entityManager->getRepository(Task::class)
+        ->createQueryBuilder('t')
+        ->where('t.isDone = :isDone')
+        ->setParameter('isDone', true)
+        ->getQuery()
+        ->getResult();
+        return $this->render('task/list.html.twig', [
+            'tasks' => $tasks,
+        ]);
+    }
+
+
+    /**
+     * Creates a new task.
+     *
+     * @param Request                $request        The request object.
+     * @param EntityManagerInterface $entityManager The entity manager to persist the task.
+     *
+     * @return Response The response containing the form to create a new task or a redirection to the to-do task list.
      */
     #[Route('/tasks/create', name: 'task_create')]
     #[IsGranted('ROLE_USER')]
@@ -53,7 +89,7 @@ class TaskController extends AbstractController
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('todo_task_list');
         }
 
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
@@ -61,9 +97,13 @@ class TaskController extends AbstractController
 
 
     /**
-     * Edit a task
+     * Edits a task.
      *
-     * @return Response
+     * @param Task                   $taskToEdit     The task entity to edit.
+     * @param Request                $request        The request object.
+     * @param EntityManagerInterface $entityManager The entity manager to persist the task changes.
+     *
+     * @return Response The response containing the form to edit the task or a redirection to the appropriate task list.
      */
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
     #[IsGranted('ROLE_USER')]
@@ -79,7 +119,12 @@ class TaskController extends AbstractController
                     $entityManager->flush();
                     $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-                    return $this->redirectToRoute('task_list');
+                    if($taskToEdit->isIsDone()){
+                        return $this->redirectToRoute('done_task_list');
+                    }else{
+                        return $this->redirectToRoute('todo_task_list');
+
+                    }
                 
                 
             }
@@ -89,7 +134,12 @@ class TaskController extends AbstractController
             ]);
         } else {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à modifier cette tâche');
-            return $this->redirectToRoute('task_list');
+            if($taskToEdit->isIsDone()){
+                return $this->redirectToRoute('done_task_list');
+            }else{
+                return $this->redirectToRoute('todo_task_list');
+
+            }
         }
     }
 
@@ -113,14 +163,23 @@ class TaskController extends AbstractController
 
         if ($task->isIsDone()) {
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+            return $this->redirectToRoute('done_task_list');
         }else{
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle())); 
+            return $this->redirectToRoute('todo_task_list');
         }
 
-        return $this->redirectToRoute('task_list');
     }
 
 
+    /**
+     * Deletes a task.
+     *
+     * @param Task                   $taskToDelete   The task entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager to remove the task.
+     *
+     * @return RedirectResponse Redirects to the to-do task list after deleting the task.
+     */
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     #[IsGranted('ROLE_USER')]
     public function deleteTaskAction(Task $taskToDelete,EntityManagerInterface $entityManager): RedirectResponse
@@ -132,10 +191,11 @@ class TaskController extends AbstractController
 
             $this->addFlash('success', 'La tâche a bien été supprimée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('todo_task_list');
         } else {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à supprimer cette tâche');
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('todo_task_list');
         }
     }
+
 }
