@@ -26,14 +26,6 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $manager->persist($user1);
         $this->addReference('admin', $user1);
 
-        $user2 = new User();
-        $user2->setUserName('Anonymus');
-        $user2->setRoles(['ROLE_USER']);
-        $user2->setPassword('anonymus');
-        $user2->setEmail('fake@fake.fk');
-        $manager->persist($user2);
-        $this->addReference('anonymus', $user2);
-
         $user3 = new User();
         $user3->setUserName('userToLog');
         $user3->setRoles(['ROLE_USER']);

@@ -8,6 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+
+    /**
+     * Renders the main page.
+     *
+     * This method is responsible for rendering the main page of the application.
+     * It takes no parameters.
+     *
+     * @return Response The response containing the rendered main page.
+     */
     #[Route('/', name: 'app_main')]
     public function index(): Response
     {
@@ -15,4 +24,5 @@ class MainController extends AbstractController
             'controller_name' => 'MainController',
         ]);
     }
+    
 }

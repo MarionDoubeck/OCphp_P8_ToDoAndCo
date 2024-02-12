@@ -19,13 +19,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for user-related actions.
  */
-/* #[IsGranted('ROLE_ADMIN')] */
 class UserController extends AbstractController
 {
+
     /**
-     * Displays the page to manage the User.
+     * Displays the page to manage users.
      *
-     * @return Response
+     * @param EntityManagerInterface $entityManager The entity manager to fetch users.
+     *
+     * @return Response The response containing the rendered list of users.
      */
     #[Route('/users', name: 'user_list')]
     #[IsGranted('ROLE_ADMIN')]
@@ -39,10 +41,17 @@ class UserController extends AbstractController
         ]);
     }
 
+
     /**
-     * Displays the page to create an user.
+     * Displays the page to create a user.
      *
-     * @return Response
+     * @param Request                     $request              The request object.
+     * @param UserPasswordHasherInterface $userPasswordHasher   The password hasher service.
+     * @param UserAuthenticatorInterface  $userAuthenticator    The user authenticator service.
+     * @param UserAuthenticator           $authenticator        The authenticator service.
+     * @param EntityManagerInterface      $entityManager       The entity manager to persist the user.
+     *
+     * @return Response The response containing the form to create a user or a redirection to the user list.
      */
     #[Route('/users/create', name: 'user_create')]
     #[IsGranted('ROLE_ADMIN')]
@@ -85,7 +94,12 @@ class UserController extends AbstractController
     /**
      * Displays the page for editing user data.
      *
-     * @return Response
+     * @param User                        $userToEdit           The user entity to edit.
+     * @param Request                     $request              The request object.
+     * @param UserPasswordHasherInterface $userPasswordHasher   The password hasher service.
+     * @param EntityManagerInterface      $entityManager       The entity manager to persist the user changes.
+     *
+     * @return Response The response containing the form to edit the user or a redirection to the user list.
      */
     #[Route('/users/{id}/edit', name: 'user_edit')]
     #[IsGranted('ROLE_ADMIN')]
@@ -107,7 +121,6 @@ class UserController extends AbstractController
                 $userToEdit->setEmail($form->get('email')->getData());
             }
             if($form->get('password')->getData()){
-                // Encode the password.
                 $userToEdit->setPassword(
                     $userPasswordHasher->hashPassword(
                         $userToEdit,
@@ -115,7 +128,6 @@ class UserController extends AbstractController
                     )
                 );
             }
-            // Set roles.
             $roles = $form->get('roles')->getData();
             if($roles){
                 $realRoles = ['ROLE_ADMIN', 'ROLE_USER'];
@@ -142,4 +154,31 @@ class UserController extends AbstractController
         ]);
         
     }
+
+
+    /**
+     * Deletes a user.
+     *
+     * @param User                        $userToDelete         The user entity to delete.
+     * @param EntityManagerInterface      $entityManager       The entity manager to remove the user and associated tasks.
+     *
+     * @return RedirectResponse Redirects to the user list after deleting the user.
+     */
+    #[Route('/users/{id}/delete', name: 'user_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteUserAction(
+        User $userToDelete,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse
+    {
+        $tasksToDelete = $userToDelete->getTasks();
+        foreach ($tasksToDelete as $task) {
+            $entityManager->remove($task);
+        }    
+        $entityManager->remove($userToDelete);
+        $entityManager->flush();
+        $this->addFlash('success', 'L\'utilisateur ' . $userToDelete->getUsername() . ' a été supprimé avec succès');
+        return $this->redirectToRoute('user_list');
+    }
+
 }

@@ -69,18 +69,6 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $this->addReference('user_'.$this->counter, $dev);
         $this->counter++;
 
-        //User_11 is 'Anonymus'.
-        $anonymus = new User();
-        $anonymus->setUserName('Anonymus');
-        $anonymus->setRoles(['ROLE_USER']);
-        $anonymus->setPassword(
-            $this->passwordEncoder->hashPassword($anonymus, 'secret')
-        );
-        $anonymus->setEmail('fake@fake.fk');
-        $manager->persist($anonymus);
-        $this->addReference('user_'.$this->counter, $anonymus);
-        $this->counter++;
-
         $manager->flush();
 
     }//end load()

@@ -16,6 +16,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends ServiceEntityRepository
 {
+
+    /**
+     * Constructor.
+     *
+     * Initializes a new instance of the TaskRepository class.
+     *
+     * @param ManagerRegistry $registry The registry that holds the entity managers.
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
