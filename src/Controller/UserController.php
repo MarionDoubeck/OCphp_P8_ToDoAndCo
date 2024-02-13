@@ -7,7 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
-/* use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted; */
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -22,6 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends AbstractController
 {
 
+
     /**
      * Displays the page to manage users.
      *
@@ -33,8 +33,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function displayUserListAction(
         EntityManagerInterface $entityManager,
-    ): Response
-    {
+    ): Response {
         $Users = $entityManager->getRepository(User::class)->findAll();
         return $this->render('user/list.html.twig', [
             'users' => $Users,
