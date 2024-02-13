@@ -15,25 +15,32 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
+
+    // Id of the task.
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    // Title of the task.
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $title = null; // Title of the task.
+    private ?string $title = null; 
 
+    // Content of the task.
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null; // Content of the task.
+    private ?string $content = null; 
 
+    // Creation date of the task.
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null; // Creation date of the task.
+    private ?\DateTimeImmutable $createdAt = null; 
 
+    // Indicates if the task is done or not.
     #[ORM\Column]
-    private ?bool $isDone = null; // Indicates if the task is done or not.
+    private ?bool $isDone = null; 
 
+    // Author of the task.
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?User $author = null; // Author of the task.
+    private ?User $author = null; 
 
 
     /**
@@ -164,7 +171,7 @@ class Task
      * Toggles the status of the task (done/undone).
      *
      * @param mixed $flag The flag indicating whether the task is done or not.
-     * 
+     *
      * @return void
      */
     public function toggle($flag)

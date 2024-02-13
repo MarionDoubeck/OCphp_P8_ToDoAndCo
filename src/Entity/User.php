@@ -19,11 +19,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    // Id of the user.
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    // Username of the user.
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
@@ -36,9 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    // Email of the user.
     #[ORM\Column(length: 60)]
     private ?string $email = null;
 
+    // Tasks of the user.
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'author')]
     private Collection $tasks;
 
@@ -170,7 +175,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Erases the user's credentials.
      *
      * This method should clear any sensitive data stored temporarily on the user.
-     * 
+     *
      * @return void
      */
     public function eraseCredentials(): void

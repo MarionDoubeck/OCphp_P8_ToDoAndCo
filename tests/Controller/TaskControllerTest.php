@@ -19,7 +19,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to check the list of tasks when logged in as a user.
-     * 
+     *
      * @return void
      */
     public function testListWhenLoggedInAsUser(): void
@@ -40,7 +40,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to verify the display of the task creation form when not logged in.
-     * 
+     *
      * @return void
      */
     public function testDisplayCreateWhenNotLoggedIn(): void
@@ -57,7 +57,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to verify the display of the task creation form when logged in.
-     * 
+     *
      * @return void
      */
     public function testDisplayCreateWhenLoggedIn(): void
@@ -79,7 +79,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to create a new task.
-     * 
+     *
      * @return void
      */
     public function testCreateTask(): void
@@ -106,7 +106,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to edit a task when not logged in.
-     * 
+     *
      * @return void
      */
     public function testEditTaskWhenNotLoggedIn(): void
@@ -124,7 +124,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to edit a task as the author of the task.
-     * 
+     *
      * @return void
      */
     public function testEditTaskAsAuthor(): void
@@ -165,7 +165,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to edit a task as a user who is not the author of the task.
-     * 
+     *
      * @return void
      */
     public function testEditTaskAsNotAuthor(): void
@@ -208,7 +208,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to toggle the status of a task again to revert the status.
-     * 
+     *
      * @return void
      */
     public function testTaskToggleReverse(): void
@@ -233,7 +233,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to delete a task when the user is not the author of the task.
-     * 
+     *
      * @return void
      */
     public function testTaskDeleteAsNotAuthor(): void
@@ -255,7 +255,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to delete a task as the author of the task.
-     * 
+     *
      * @return void
      */
     public function testTaskDeleteAsAuthor(): void
@@ -284,7 +284,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to delete an anonymous task when the user is not an admin.
-     * 
+     *
      * @return void
      */
     public function testAnonymousTaskDeleteAsNotAdmin(): void
@@ -306,7 +306,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to delete an anonymous task as an admin.
-     * 
+     *
      * @return void
      */
     public function testAnonymousTaskDeleteAsAdmin(): void

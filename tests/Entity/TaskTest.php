@@ -14,7 +14,7 @@ class TaskTest extends TestCase
 
     /**
      * Test the Task entity.
-     * 
+     *
      * @return void
      */
     public function testTaskEntity()
