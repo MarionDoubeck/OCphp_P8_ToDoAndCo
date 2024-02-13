@@ -28,7 +28,7 @@ class UserRepositoryTest extends WebTestCase
     {
         $userRepository = static::getContainer()->get(UserRepository::class);
         $userToEdit = $userRepository->findOneBy(['username' => 'UserToEdit']);
-        
+
         // Call the upgradePassword method with the mock user object and a new hashed password
         $newHashedPassword = 'new_hashed_password';
         $userRepository = static::getContainer()->get(UserRepository::class);

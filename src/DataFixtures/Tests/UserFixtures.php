@@ -10,6 +10,7 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 class UserFixtures extends Fixture implements FixtureGroupInterface
 {
 
+
     /**
      * Load dummy user data into the database for tests
      *
@@ -17,7 +18,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
      * @return void
      */
     public function load(ObjectManager $manager): void
-    {   
+    {
         $user1 = new User();
         $user1->setUserName('admin');
         $user1->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
@@ -65,4 +66,5 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['groupTest'];
     }
+
 }

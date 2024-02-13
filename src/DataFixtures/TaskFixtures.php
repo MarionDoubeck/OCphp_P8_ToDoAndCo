@@ -33,16 +33,17 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $task->setContent($faker->text(rand(30,150)));
             $task->setCreatedAt(new \DateTimeImmutable());
             $task->setIsDone($faker->boolean);
-            //Half tasks related to 'Anonymus'
-            if(rand(0,1) >= 1){
+            // Half tasks related to 'Anonymus'
+            if (rand(0,1) >= 1) {
                 $user = null;
-            } else{
+            } else {
                 $user = $this->getReference('user_'.rand(1,10));
             }
-            $task->setAuthor($user);
 
+            $task->setAuthor($user);
             $manager->persist($task);
         }
+
         $manager->flush();
     }//end load()
 
@@ -56,14 +57,12 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
      */
     public function getDependencies():array
     {
-        return [
-            UserFixtures::class
-        ];
+        return [UserFixtures::class];
     }//end getDependencies()
 
 
     public static function getGroups(): array
     {
         return ['groupApp'];
-    }
+    }//end getGroups()
 }
