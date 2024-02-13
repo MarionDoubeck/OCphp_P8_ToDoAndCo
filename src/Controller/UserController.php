@@ -36,6 +36,7 @@ class UserController extends AbstractController
     ) : Response {
         $Users = $entityManager->getRepository(User::class)->findAll();
         return $this->render('user/list.html.twig', ['users' => $Users]);
+
     }//end displayUserListAction()
 
 
@@ -44,9 +45,9 @@ class UserController extends AbstractController
      *
      * @param Request                     $request            The request object.
      * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
-     * @param UserAuthenticatorInterface  $userAuthenticator  The user authenticator service.
-     * @param UserAuthenticator           $authenticator      The authenticator service.
-     * @param EntityManagerInterface      $entityManager      The entity manager to persist the user.
+     * @param UserAuthenticatorInterface  $userAuthenticatorThe user authenticator service.
+     * @param UserAuthenticator           $authenticator    The authenticator service.
+     * @param EntityManagerInterface      $entityManager     The entity manager to persist the user.
      *
      * @return Response The response containing the form to create a user or a redirection to the user list.
      */
@@ -69,7 +70,7 @@ class UserController extends AbstractController
             // Set roles.
             $roles = $form->get('roles')->getData();
             $user -> setRoles(['ROLE_USER']);
-            if($roles !== FALSE) {
+            if ($roles !== FALSE) {
                 $user -> setRoles(['ROLE_ADMIN', 'ROLE_USER']);
             }
 
@@ -78,20 +79,20 @@ class UserController extends AbstractController
 
             $this->addFlash('success','L\'utilisateur a bien été créé.');
             return $this->redirectToRoute('user_list');
-
-        }
+        }//end if
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
+
     }
 
 
     /**
      * Displays the page for editing user data.
      *
-     * @param User                        $userToEdit           The user entity to edit.
-     * @param Request                     $request              The request object.
-     * @param UserPasswordHasherInterface $userPasswordHasher   The password hasher service.
-     * @param EntityManagerInterface      $entityManager       The entity manager to persist the user changes.
+     * @param User                        $userToEdit         The user entity to edit.
+     * @param Request                     $request            The request object.
+     * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
+     * @param EntityManagerInterface      $entityManager      The entity manager to persist the user changes.
      *
      * @return Response The response containing the form to edit the user or a redirection to the user list.
      */
@@ -106,14 +107,14 @@ class UserController extends AbstractController
         $form = $this->createForm(UserFormType::class, $userToEdit);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if($form->get('username')->getData() && $form->get('username')->getData() !== $userToEdit->getUsername()){
+        if ($form->isSubmitted() === TRUE && $form->isValid() === TRUE) {
+            if ($form->get('username')->getData()!== FALSE && $form->get('username')->getData() !== $userToEdit->getUsername()) {
                 $userToEdit->setUsername($form->get('username')->getData());
             }
-            if($form->get('email')->getData() && $form->get('email')->getData() !== $userToEdit->getEmail()){
+            if ($form->get('email')->getData() !== FALSE && $form->get('email')->getData() !== $userToEdit->getEmail()) {
                 $userToEdit->setEmail($form->get('email')->getData());
             }
-            if($form->get('password')->getData()){
+            if ($form->get('password')->getData() !== FALSE) {
                 $userToEdit->setPassword(
                     $userPasswordHasher->hashPassword(
                         $userToEdit,
@@ -122,14 +123,14 @@ class UserController extends AbstractController
                 );
             }
             $roles = $form->get('roles')->getData();
-            if($roles){
+            if ($roles) {
                 $realRoles = ['ROLE_ADMIN', 'ROLE_USER'];
-                if($roles !== $userToEdit->getRoles()){
+                if ($roles !== $userToEdit->getRoles()) {
                     $userToEdit -> setRoles($realRoles);
                 }
-            }else{
+            } else {
                 $realRoles = ['ROLE_USER'];
-                if($roles !== $userToEdit->getRoles()){
+                if ($roles !== $userToEdit->getRoles()) {
                     $userToEdit -> setRoles($realRoles);
                 }
             }
@@ -137,7 +138,7 @@ class UserController extends AbstractController
             $entityManager->persist($userToEdit);
             $entityManager->flush();
 
-            $this->addFlash('success','Le profil de ' . $userToEdit->getUsername() . ' a bien été modifié');
+            $this->addFlash('success','Le profil de '.$userToEdit->getUsername().' a bien été modifié');
             return $this->redirectToRoute('user_list');
         }
         return $this->render('user/edit.html.twig', [
@@ -162,15 +163,14 @@ class UserController extends AbstractController
     public function deleteUserAction(
         User $userToDelete,
         EntityManagerInterface $entityManager
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $tasksToDelete = $userToDelete->getTasks();
         foreach ($tasksToDelete as $task) {
             $entityManager->remove($task);
         }    
         $entityManager->remove($userToDelete);
         $entityManager->flush();
-        $this->addFlash('success', 'L\'utilisateur ' . $userToDelete->getUsername() . ' a été supprimé avec succès');
+        $this->addFlash('success', 'L\'utilisateur '.$userToDelete->getUsername().' a été supprimé avec succès');
         return $this->redirectToRoute('user_list');
     }
 
