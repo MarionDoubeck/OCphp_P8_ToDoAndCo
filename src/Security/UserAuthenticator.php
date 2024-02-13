@@ -28,9 +28,16 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
+
+    /**
+     * Constructor for the UserAuthenticator class.
+     *
+     * @param UrlGeneratorInterface $urlGenerator The URL generator interface used for generating URLs.
+     */
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-    }
+
+    }//end __construct()
 
 
     /**
@@ -56,7 +63,8 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
                 new RememberMeBadge(),
             ]
         );
-    }
+
+    }//end authenticate()
 
 
     /**
@@ -76,10 +84,9 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_main'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
-    }
+        return new RedirectResponse($this->urlGenerator->generate('app_main'));
+
+    }//end onAuthenticationSuccess()
 
 
     /**
@@ -94,6 +101,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
-    }
+
+    }//end getLoginUrl()
 
 }

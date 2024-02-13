@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
+
+
     /**
      * @return void
      */
@@ -26,5 +28,6 @@ class UserTest extends TestCase
         $this->assertNull($user->getId());
         $this->assertNull($user->eraseCredentials());
     }
+
 
 }

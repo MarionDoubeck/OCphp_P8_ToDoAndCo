@@ -45,6 +45,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
         }
 
         $manager->flush();
+
     }//end load()
 
 
@@ -58,11 +59,20 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
     public function getDependencies():array
     {
         return [UserFixtures::class];
+
     }//end getDependencies()
 
 
+    /**
+     * Returns the groups associated with this entity.
+     *
+     * @return array The groups associated with this entity.
+     */
     public static function getGroups(): array
     {
         return ['groupApp'];
+
     }//end getGroups()
+
+
 }
