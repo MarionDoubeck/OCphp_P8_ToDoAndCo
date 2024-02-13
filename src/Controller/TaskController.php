@@ -35,7 +35,7 @@ class TaskController extends AbstractController
             ->getResult();
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
 
-    }// end displayTodoTaskListAction
+    }// end displayTodoTaskListAction()
 
 
     /**
@@ -144,6 +144,7 @@ class TaskController extends AbstractController
             }
 
         }// end if
+
     }//end editTaskAction()
 
 
@@ -201,6 +202,7 @@ class TaskController extends AbstractController
             $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à supprimer cette tâche');
             return $this->redirectToRoute('todo_task_list');
         }
+
     }//end deleteTaskAction()
 
 

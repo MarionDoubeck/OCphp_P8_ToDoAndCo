@@ -182,4 +182,4 @@ class UserController extends AbstractController
     }//end deleteUserAction()
 
 
-}
+}//end UserController
