@@ -7,11 +7,19 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class TaskControllerTest
+ *
+ * This class contains functional tests for the TaskController.
+ */
 class TaskControllerTest extends WebTestCase
 {
 
+
+    /**
+     * Test to check the list of tasks when logged in as a user.
+     */
     public function testListWhenLoggedInAsUser(): void
     {
         $client = static::createClient();
@@ -26,7 +34,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertRouteSame('task_list');
     }
 
- 
+
+    /**
+     * Test to verify the display of the task creation form when not logged in.
+     */
     public function testDisplayCreateWhenNotLoggedIn(): void
     {
         $client = static::createClient();
@@ -37,6 +48,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertRouteSame('app_login');
     }
 
+
+    /**
+     * Test to verify the display of the task creation form when logged in.
+     */
     public function testDisplayCreateWhenLoggedIn(): void
     {
         $client = static::createClient();
@@ -52,6 +67,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertInstanceOf(Form::class, $crawler->selectButton('Ajouter')->form());
     }
 
+
+    /**
+     * Test to create a new task.
+     */
     public function testCreateTask(): void
     {
         $client = static::createClient();
@@ -73,6 +92,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to edit a task when not logged in.
+     */
     public function testEditTaskWhenNotLoggedIn(): void
     {
         $client = static::createClient();
@@ -85,6 +107,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to edit a task as the author of the task.
+     */
     public function testEditTaskAsAuthor(): void
     {
         $client = static::createClient();
@@ -120,6 +145,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to edit a task as a user who is not the author of the task.
+     */
     public function testEditTaskAsNotAuthor(): void
     {
         $client = static::createClient();
@@ -136,6 +164,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to toggle the status of a task.
+     */
     public function testTaskToggle(): void
     {
         $client = static::createClient();
@@ -155,6 +186,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to toggle the status of a task again to revert the status.
+     */
     public function testTaskToggleReverse(): void
     {
         $client = static::createClient();
@@ -173,7 +207,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame(!$isDone, $task->isIsDone());
     }
 
-    
+
+    /**
+     * Test to delete a task when the user is not the author of the task.
+     */
     public function testTaskDeleteAsNotAuthor(): void
     {
         $client = static::createClient();
@@ -191,6 +228,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to delete a task as the author of the task.
+     */
     public function testTaskDeleteAsAuthor(): void
     {
         $client = static::createClient();
@@ -213,7 +253,10 @@ class TaskControllerTest extends WebTestCase
         $client->submit($form);
     }
 
-    
+
+    /**
+     * Test to delete an anonymous task when the user is not an admin.
+     */
     public function testAnonymousTaskDeleteAsNotAdmin(): void
     {
         $client = static::createClient();
@@ -230,6 +273,9 @@ class TaskControllerTest extends WebTestCase
     }
 
 
+    /**
+     * Test to delete an anonymous task as an admin.
+     */
     public function testAnonymousTaskDeleteAsAdmin(): void
     {
         $client = static::createClient();

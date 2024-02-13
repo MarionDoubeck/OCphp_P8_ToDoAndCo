@@ -34,7 +34,8 @@ class TaskController extends AbstractController
             ->getQuery()
             ->getResult();
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
-    }
+
+    }// end displayTodoTaskListAction
 
 
     /**
@@ -61,7 +62,7 @@ class TaskController extends AbstractController
     /**
      * Creates a new task.
      *
-     * @param Request                $request        The request object.
+     * @param Request                $request       The request object.
      * @param EntityManagerInterface $entityManager The entity manager to persist the task.
      *
      * @return Response The response containing the form to create a new task or a redirection to the to-do task list.
@@ -96,7 +97,7 @@ class TaskController extends AbstractController
     /**
      * Edits a task.
      *
-     * @param Task                   $taskToEdit     The task entity to edit.
+     * @param Task                   $taskToEdit    The task entity to edit.
      * @param Request                $request        The request object.
      * @param EntityManagerInterface $entityManager The entity manager to persist the task changes.
      *
@@ -113,21 +114,20 @@ class TaskController extends AbstractController
         if ($connectedUser === $taskToEdit->getAuthor()) {
             $form = $this->createForm(TaskFormType::class, $taskToEdit);
             $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                
-                    $entityManager->persist($taskToEdit);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'La tâche a bien été modifiée.');
+            if ($form->isSubmitted() === TRUE && $form->isValid() === TRUE) {
+                $entityManager->persist($taskToEdit);
+                $entityManager->flush();
+                $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-                    if($taskToEdit->isIsDone()){
-                        return $this->redirectToRoute('done_task_list');
-                    }else{
-                        return $this->redirectToRoute('todo_task_list');
+                if ($taskToEdit->isIsDone() === TRUE) {
+                    return $this->redirectToRoute('done_task_list');
+                } else {
+                    return $this->redirectToRoute('todo_task_list');
 
-                    }
-                
+                }
                 
             }
+
             return $this->render('task/edit.html.twig', [
                 'form' => $form->createView(),
                 'task' => $taskToEdit,
@@ -140,7 +140,8 @@ class TaskController extends AbstractController
                 return $this->redirectToRoute('todo_task_list');
 
             }
-        }//end if
+
+        }// end if
     }
 
 
@@ -149,7 +150,7 @@ class TaskController extends AbstractController
      *
      * @Route('/status/{title}', name='toggle_task')
      *
-     * @param Tasks                  $task           The task entity to toggle.
+     * @param Tasks                  $task          The task entity to toggle.
      * @param EntityManagerInterface $entityManager The entity manager for persisting changes.
      *
      * @return RedirectResponse Redirects to the appropriate task list view after toggling the task status.
@@ -175,7 +176,7 @@ class TaskController extends AbstractController
     /**
      * Deletes a task.
      *
-     * @param Task                   $taskToDelete   The task entity to delete.
+     * @param Task                   $taskToDelete  The task entity to delete.
      * @param EntityManagerInterface $entityManager The entity manager to remove the task.
      *
      * @return RedirectResponse Redirects to the to-do task list after deleting the task.
@@ -187,7 +188,7 @@ class TaskController extends AbstractController
         EntityManagerInterface $entityManager
     ): RedirectResponse {
         $connectedUser = $this->getUser();
-        if ($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) && null === $taskToDelete->getAuthor())) {
+        if ($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) === TRUE && null === $taskToDelete->getAuthor())) {
             $entityManager->remove($taskToDelete);
             $entityManager->flush();
 
