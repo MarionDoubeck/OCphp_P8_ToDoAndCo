@@ -15,6 +15,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
      * Load dummy user data into the database for tests
      *
      * @param ObjectManager $manager The entity manager to persist the data.
+     * 
      * @return void
      */
     public function load(ObjectManager $manager): void

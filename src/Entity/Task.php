@@ -21,19 +21,19 @@ class Task
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $title = null;
+    private ?string $title = null; // Title of the task.
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    private ?string $content = null; // Content of the task.
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null; // Creation date of the task.
 
     #[ORM\Column]
-    private ?bool $isDone = null;
+    private ?bool $isDone = null; // Indicates if the task is done or not.
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?User $author = null;
+    private ?User $author = null; // Author of the task.
 
 
     /**
@@ -164,6 +164,8 @@ class Task
      * Toggles the status of the task (done/undone).
      *
      * @param mixed $flag The flag indicating whether the task is done or not.
+     * 
+     * @return void
      */
     public function toggle($flag)
     {

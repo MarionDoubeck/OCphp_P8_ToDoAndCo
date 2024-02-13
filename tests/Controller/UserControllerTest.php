@@ -163,7 +163,7 @@ class UserControllerTest extends WebTestCase
         $client->loginUser($testUser);
         $client->followRedirects();
         $user = static::getContainer()->get(UserRepository::class)->findOneByUsername('userToEdit');
-        $client->request(Request::METHOD_GET, '/users/' . $user->getId() . '/edit');
+        $client->request(Request::METHOD_GET, '/users/'.$user->getId().'/edit');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

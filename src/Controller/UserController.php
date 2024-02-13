@@ -43,11 +43,11 @@ class UserController extends AbstractController
     /**
      * Displays the page to create a user.
      *
-     * @param Request $request The request object.
+     * @param Request                     $request            The request object.
      * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
-     * @param UserAuthenticatorInterface $userAuthenticator The user authenticator service.
-     * @param UserAuthenticator $authenticator The authenticator service.
-     * @param EntityManagerInterface $entityManager The entity manager to persist the user.
+     * @param UserAuthenticatorInterface  $userAuthenticator  The user authenticator service.
+     * @param UserAuthenticator           $authenticator      The authenticator service.
+     * @param EntityManagerInterface      $entityManager      The entity manager to persist the user.
      *
      * @return Response The response containing the form to create a user or a redirection to the user list.
      */
@@ -137,7 +137,6 @@ class UserController extends AbstractController
                 if ($roles !== $userToEdit->getRoles()) {
                     $userToEdit -> setRoles($realRoles);
                 }
-
             }
 
             $entityManager->persist($userToEdit);
@@ -146,6 +145,7 @@ class UserController extends AbstractController
             $this->addFlash('success','Le profil de '.$userToEdit->getUsername().' a bien été modifié');
             return $this->redirectToRoute('user_list');
         }//end if
+
         return $this->render('user/edit.html.twig', [
                                                         'controller_name' => 'UserController',
                                                         'user' => $userToEdit,

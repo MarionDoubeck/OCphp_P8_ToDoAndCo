@@ -12,6 +12,8 @@ class TaskRepositoryTest extends TestCase
 
     /**
      * Tests the constructor of the TaskRepository class.
+     * 
+     * @return void
      */
     public function testConstructor()
     {
