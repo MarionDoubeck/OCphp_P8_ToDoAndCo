@@ -13,6 +13,12 @@ class UserControllerTest extends WebTestCase
 {
     private KernelBrowser|null $client = null;
 
+
+    /**
+     * Test accessing user list page when not logged in.
+     *
+     * @return void
+     */
     public function testUserListAsNotLoggedIn(): void
     {
         $client = static::createClient();
@@ -23,6 +29,12 @@ class UserControllerTest extends WebTestCase
         $this->assertRouteSame('app_login');
     }
 
+
+    /**
+     * Test accessing user list page when not an admin.
+     *
+     * @return void
+     */
     public function testUserListAsNotAdmin(): void
     {
         $client = static::createClient();
@@ -35,6 +47,12 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
+
+    /**
+     * Test accessing user list page as an admin.
+     *
+     * @return void
+     */
     public function testUserListAsAdmin()
     {
         $client = static::createClient();
@@ -52,6 +70,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
+
+    /**
+     * Test creating a user as an admin.
+     *
+     * @return void
+     */
     public function testUserCreateAsAdmin()
     {
         $client = static::createClient();
@@ -77,6 +101,12 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
+
+    /**
+     * Test creating an admin as an admin.
+     *
+     * @return void
+     */
     public function testAdminCreateAsAdmin()
     {
         $client = static::createClient();
@@ -102,17 +132,29 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
+
+    /**
+     * Test editing a user when not logged in.
+     *
+     * @return void
+     */
     public function testEditUserAsNotLoggedIn(): void
     {
         $client = static::createClient();
         $user = static::getContainer()->get(UserRepository::class)->findOneByUsername('userToEdit');
-        $client->request(Request::METHOD_GET, '/users/' . $user->getId() . '/edit');
+        $client->request(Request::METHOD_GET, '/users/'.$user->getId().'/edit');
 
         $this->assertResponseRedirects();
         $client->followRedirect();
         $this->assertRouteSame('app_login');
     }
 
+
+    /**
+     * Test editing a user when not an admin.
+     *
+     * @return void
+     */
     public function testEditUserAsNotAdmin(): void
     {
         $client = static::createClient();
@@ -126,6 +168,12 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
+
+    /**
+     * Test editing a user as an admin.
+     *
+     * @return void
+     */
     public function testEditUserAsAdmin(): void
     {
         $client = static::createClient();
@@ -134,7 +182,7 @@ class UserControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByUsername('admin');
         $client->loginUser($testUser);
         $client->followRedirects();
-        $crawler =$client->request(Request::METHOD_GET, '/users/' . $userToEdit->getId() . '/edit');
+        $crawler =$client->request(Request::METHOD_GET, '/users/'.$userToEdit->getId().'/edit');
 
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('user_edit');
@@ -149,11 +197,10 @@ class UserControllerTest extends WebTestCase
         $form['user_form[email]'] = 'modified@user.user';
         $client->submit($form);
 
-        //$this->assertResponseRedirects();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorExists('div.alert.alert-success');
 
-        $client->request(Request::METHOD_GET, '/users/' . $userToEdit->getId() . '/edit');
+        $client->request(Request::METHOD_GET, '/users/'.$userToEdit->getId().'/edit');
         $form = $crawler->selectButton('Modifier')->form();
         $form['user_form[username]' ]= 'userToEdit';
         $form['user_form[password][first]'] = 'password';

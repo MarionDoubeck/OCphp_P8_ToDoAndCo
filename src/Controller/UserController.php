@@ -108,13 +108,13 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() === TRUE && $form->isValid() === TRUE) {
-            if ($form->get('username')->getData() !== FALSE && $form->get('username')->getData() !== $userToEdit->getUsername()) {
+            if ($form->get('username')->getData() !== NULL && $form->get('username')->getData() !== $userToEdit->getUsername()) {
                 $userToEdit->setUsername($form->get('username')->getData());
             }
-            if ($form->get('email')->getData() !== FALSE && $form->get('email')->getData() !== $userToEdit->getEmail()) {
+            if ($form->get('email')->getData() !== NULL && $form->get('email')->getData() !== $userToEdit->getEmail()) {
                 $userToEdit->setEmail($form->get('email')->getData());
             }
-            if ($form->get('password')->getData() !== FALSE) {
+            if ($form->get('password')->getData() !== NULL) {
                 $userToEdit->setPassword(
                     $userPasswordHasher->hashPassword(
                         $userToEdit,

@@ -20,7 +20,7 @@
                     {% endif %}
                     <p>{{ task.content }}</p>
                 </div>
-                {% if app.user == task.author or (is_granted('ROLE_ADMIN') and task.author == null) %}
+                {% if app.user and (app.user == task.author or (is_granted('ROLE_ADMIN') and task.author == null)) %}
                 <div>
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
                         <button class="btn btn-success btn-sm pull-right">
