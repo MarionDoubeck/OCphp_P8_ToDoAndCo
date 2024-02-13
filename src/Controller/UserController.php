@@ -37,17 +37,17 @@ class UserController extends AbstractController
         $Users = $entityManager->getRepository(User::class)->findAll();
         return $this->render('user/list.html.twig', ['users' => $Users]);
 
-    }//end displayUserListAction()
+    }// end displayUserListAction()
 
 
     /**
      * Displays the page to create a user.
      *
-     * @param Request                     $request            The request object.
-     * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
+     * @param Request                     $request          The request object.
+     * @param UserPasswordHasherInterface $userPasswordHasherThe password hasher service.
      * @param UserAuthenticatorInterface  $userAuthenticatorThe user authenticator service.
-     * @param UserAuthenticator           $authenticator    The authenticator service.
-     * @param EntityManagerInterface      $entityManager     The entity manager to persist the user.
+     * @param UserAuthenticator           $authenticator  The authenticator service.
+     * @param EntityManagerInterface      $entityManager    The entity manager to persist the user.
      *
      * @return Response The response containing the form to create a user or a redirection to the user list.
      */
@@ -79,7 +79,7 @@ class UserController extends AbstractController
 
             $this->addFlash('success','L\'utilisateur a bien été créé.');
             return $this->redirectToRoute('user_list');
-        }//end if
+        }// end if
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
 
