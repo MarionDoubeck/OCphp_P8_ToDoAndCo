@@ -86,4 +86,4 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     }//end getGroups()
 
 
-}
+}//end class

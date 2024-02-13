@@ -27,4 +27,4 @@ class MainController extends AbstractController
     }//end index()
 
 
-}
+}//end class

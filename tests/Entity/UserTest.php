@@ -10,6 +10,8 @@ class UserTest extends TestCase
 
 
     /**
+     * Test the User entity.
+     * 
      * @return void
      */
     public function testUserEntity(): void
@@ -27,7 +29,8 @@ class UserTest extends TestCase
         $this->assertEquals(['ROLE_USER'], $user->getRoles());
         $this->assertNull($user->getId());
         $this->assertNull($user->eraseCredentials());
-    }
+
+    }//end testUserEntity()
 
 
-}
+}//end class

@@ -104,4 +104,4 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     }//end getLoginUrl()
 
-}
+}//end class

@@ -27,7 +27,8 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseRedirects();
         $client->followRedirect();
         $this->assertRouteSame('app_login');
-    }
+
+    }//end testUserListAsNotLoggedIn()
 
 
     /**
@@ -45,7 +46,8 @@ class UserControllerTest extends WebTestCase
         $client->request(Request::METHOD_GET, '/users');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
+
+    }//end testUserListAsNotAdmin()
 
 
     /**
@@ -68,7 +70,8 @@ class UserControllerTest extends WebTestCase
             count(static::getContainer()->get(UserRepository::class)->findAll()),
             $crawler->filter('table tbody tr')
         );
-    }
+
+    }//end testUserListAsAdmin()
 
 
     /**
@@ -99,7 +102,8 @@ class UserControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
+
+    }//end testUserCreateAsAdmin()
 
 
     /**
@@ -130,7 +134,8 @@ class UserControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
+
+    }//end testAdminCreateAsAdmin()
 
 
     /**
@@ -147,7 +152,8 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseRedirects();
         $client->followRedirect();
         $this->assertRouteSame('app_login');
-    }
+
+    }//end testEditUserAsNotLoggedIn()
 
 
     /**
@@ -166,7 +172,8 @@ class UserControllerTest extends WebTestCase
         $client->request(Request::METHOD_GET, '/users/'.$user->getId().'/edit');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
+
+    }//end testEditUserAsNotAdmin()
 
 
     /**
@@ -207,5 +214,8 @@ class UserControllerTest extends WebTestCase
         $form['user_form[password][second]'] = 'password';
         $form['user_form[email]'] = 'toEdit@user.user';
         $client->submit($form);
-    }
-}
+
+    }//end testEditUserAsAdmin()
+
+
+}//end class

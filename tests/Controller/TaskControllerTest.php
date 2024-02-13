@@ -19,6 +19,8 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to check the list of tasks when logged in as a user.
+     * 
+     * @return void
      */
     public function testListWhenLoggedInAsUser(): void
     {
@@ -32,11 +34,14 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('task_list');
-    }
+
+    }//end testListWhenLoggedInAsUser()
 
 
     /**
      * Test to verify the display of the task creation form when not logged in.
+     * 
+     * @return void
      */
     public function testDisplayCreateWhenNotLoggedIn(): void
     {
@@ -46,11 +51,14 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseRedirects();
         $client->followRedirect();
         $this->assertRouteSame('app_login');
-    }
+
+    }//end testDisplayCreateWhenNotLoggedIn()
 
 
     /**
      * Test to verify the display of the task creation form when logged in.
+     * 
+     * @return void
      */
     public function testDisplayCreateWhenLoggedIn(): void
     {
@@ -65,11 +73,14 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertRouteSame('task_create');
         $this->assertInstanceOf(Form::class, $crawler->selectButton('Ajouter')->form());
-    }
+
+    }//end testDisplayCreateWhenLoggedIn()
 
 
     /**
      * Test to create a new task.
+     * 
+     * @return void
      */
     public function testCreateTask(): void
     {
@@ -89,11 +100,14 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertRouteSame('task_list');
         $this->assertSelectorExists('div.alert.alert-success');
-    }
+
+    }//end testCreateTask()
 
 
     /**
      * Test to edit a task when not logged in.
+     * 
+     * @return void
      */
     public function testEditTaskWhenNotLoggedIn(): void
     {
@@ -104,11 +118,14 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseRedirects();
         $client->followRedirect();
         $this->assertRouteSame('app_login');
-    }
+
+    }//end testEditTaskWhenNotLoggedIn()
 
 
     /**
      * Test to edit a task as the author of the task.
+     * 
+     * @return void
      */
     public function testEditTaskAsAuthor(): void
     {
@@ -142,11 +159,14 @@ class TaskControllerTest extends WebTestCase
         $form['task_form[title]'] = 'taskToEdit';
         $form['task_form[content]'] = 'My task content';
         $client->submit($form);
-    }
+
+    }//end testEditTaskAsAuthor()
 
 
     /**
      * Test to edit a task as a user who is not the author of the task.
+     * 
+     * @return void
      */
     public function testEditTaskAsNotAuthor(): void
     {
@@ -161,7 +181,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à modifier cette tâche');
 
-    }
+    }//end testEditTaskAsNotAuthor()
 
 
     /**
@@ -188,6 +208,8 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to toggle the status of a task again to revert the status.
+     * 
+     * @return void
      */
     public function testTaskToggleReverse(): void
     {
@@ -205,11 +227,14 @@ class TaskControllerTest extends WebTestCase
         $this->assertRouteSame('task_list');
         $this->assertSelectorExists('div.alert.alert-success');
         $this->assertSame(!$isDone, $task->isIsDone());
-    }
+
+    }//end testTaskToggleReverse()
 
 
     /**
      * Test to delete a task when the user is not the author of the task.
+     * 
+     * @return void
      */
     public function testTaskDeleteAsNotAuthor(): void
     {
@@ -225,11 +250,13 @@ class TaskControllerTest extends WebTestCase
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à supprimer cette tâche');
 
-    }
+    }//end testTaskDeleteAsNotAuthor()
 
 
     /**
      * Test to delete a task as the author of the task.
+     * 
+     * @return void
      */
     public function testTaskDeleteAsAuthor(): void
     {
@@ -251,11 +278,14 @@ class TaskControllerTest extends WebTestCase
         $form['task_form[title]'] = 'taskToDelete';
         $form['task_form[content]'] = 'My task to delete content';
         $client->submit($form);
-    }
+
+    }//end testTaskDeleteAsAuthor()
 
 
     /**
      * Test to delete an anonymous task when the user is not an admin.
+     * 
+     * @return void
      */
     public function testAnonymousTaskDeleteAsNotAdmin(): void
     {
@@ -270,11 +300,14 @@ class TaskControllerTest extends WebTestCase
 
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à supprimer cette tâche');
-    }
+
+    }//end testAnonymousTaskDeleteAsNotAdmin()
 
 
     /**
      * Test to delete an anonymous task as an admin.
+     * 
+     * @return void
      */
     public function testAnonymousTaskDeleteAsAdmin(): void
     {
@@ -299,7 +332,8 @@ class TaskControllerTest extends WebTestCase
         $form['task_form[title]'] = 'taskAnonymusToDelete';
         $form['task_form[content]'] = 'My task without author';
         $client->submit($form);
-    }
+
+    }//end testAnonymousTaskDeleteAsAdmin()
 
 
-}
+}//end class
