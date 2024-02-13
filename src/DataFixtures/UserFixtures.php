@@ -11,7 +11,8 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 class UserFixtures extends Fixture implements FixtureGroupInterface
 {
-    /** @var int $counter Counter for tracking iterations. */
+    /** @var integer $counter Counter for tracking iterations. */
+
     private $counter = 1;
 
 
@@ -23,6 +24,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     public function __construct(
         private UserPasswordHasherInterface $passwordEncoder
     ) {
+
     }//end __construct()
 
 
@@ -43,21 +45,19 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
             $user = new User();
             $user->setUserName($faker->userName);
             $roles = $faker->randomElement([
-                ['ROLE_USER'],
-                ['ROLE_ADMIN', 'ROLE_USER'],
-            ]);
-            $user->setRoles($roles);
-            $user->setPassword(
-                $this->passwordEncoder->hashPassword($user, 'secret')
+                                            ['ROLE_USER'],
+                                            ['ROLE_ADMIN', 'ROLE_USER'],
+                                        ]
             );
+            $user->setRoles($roles);
+            $user->setPassword($this->passwordEncoder->hashPassword($user, 'secret'));
             $user->setEmail($faker->email);
-
 
             $manager->persist($user);
             $this->addReference('user_'.$this->counter, $user);
             $this->counter++;
         }
-        //User_10 is me.
+        // User_10 is me.
         $dev = new User();
         $dev->setUserName('marion');
         $dev->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
@@ -74,8 +74,16 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     }//end load()
 
 
+    /**
+     * Returns the groups associated with this entity.
+     *
+     * @return array The groups associated with this entity.
+     */
     public static function getGroups(): array
     {
         return ['groupApp'];
-    }
+
+    }//end getGroups()
+
+
 }

@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 class TaskTest extends TestCase
 {
 
+
     public function testTaskEntity()
     {
         $task = new Task;
@@ -31,5 +32,6 @@ class TaskTest extends TestCase
         $this->assertEquals(false, $task->isIsDone());
         $this->assertNull($task->getId());
     }
+
 
 }

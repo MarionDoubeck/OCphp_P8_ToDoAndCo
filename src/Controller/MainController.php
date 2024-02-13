@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
 
+
     /**
      * Renders the main page.
      *
@@ -23,6 +24,7 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig', [
             'controller_name' => 'MainController',
         ]);
-    }
+    }//edn index()
+
 
 }

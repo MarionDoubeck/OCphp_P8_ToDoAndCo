@@ -42,10 +42,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'author')]
     private Collection $tasks;
 
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
-    }
+
+    }//end _construct()
 
 
     /**
@@ -56,7 +58,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
+
+    }//end getId()
 
 
     /**
@@ -67,7 +70,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): ?string
     {
         return $this->username;
-    }
+
+    }//end getUsername()
 
 
     /**
@@ -82,7 +86,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
-    }
+
+    }//end setUsername()
 
 
     /**
@@ -95,7 +100,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
-    }
+
+    }//end getUserIdentifier()
 
 
     /**
@@ -112,7 +118,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
-    }
+
+    }//end getRoles()
 
 
     /**
@@ -127,7 +134,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
-    }
+
+    }//end setRoles()
 
 
     /**
@@ -138,7 +146,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
-    }
+
+    }//end getPassword()
 
 
     /**
@@ -153,7 +162,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
-    }
+
+    }//end setPassword()
 
 
     /**
@@ -165,7 +175,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here.
         // $this->plainPassword = null;
-    }
+    }//end eraseCredentials()
 
 
     /**
@@ -176,7 +186,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
-    }
+
+    }//end getEmail()
 
 
     /**
@@ -191,7 +202,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
-    }
+
+    }//end setEmail()
 
 
     /**
@@ -202,6 +214,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTasks(): Collection
     {
         return $this->tasks;
-    }
+
+    }//end getTasks()
+
 
 }

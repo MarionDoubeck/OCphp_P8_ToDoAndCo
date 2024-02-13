@@ -80,8 +80,16 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
     }//end getDependencies()
 
 
+    /**
+     * Returns the groups associated with this entity.
+     *
+     * @return array The groups associated with this entity.
+     */
     public static function getGroups(): array
     {
         return ['groupTest'];
-    }
+
+    }//end getGroups()
+
+
 }

@@ -13,6 +13,11 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class UserRepositoryTest extends WebTestCase
 {
+
+
+    /**
+     * Tests the constructor of the UserRepository class.
+     */
     public function testConstructor()
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -22,8 +27,13 @@ class UserRepositoryTest extends WebTestCase
         $userRepository = new UserRepository($managerRegistry);
         // Check that the UserRepository is instantiated correctly.
         $this->assertInstanceOf(UserRepository::class, $userRepository);
-    }
 
+    }//end testConstructor()
+
+
+    /**
+     * Tests the upgradePassword method of the UserRepository class.
+     */
     public function testUpgradePassword()
     {
         $userRepository = static::getContainer()->get(UserRepository::class);
@@ -40,5 +50,8 @@ class UserRepositoryTest extends WebTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage(sprintf('Instances of "%s" are not supported.', get_class($mockUser)));
         $userRepository->upgradePassword($mockUser, 'new_hashed_password');
-    }
+
+    }//end testUpgradePassword()
+
+
 }

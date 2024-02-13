@@ -44,7 +44,8 @@ class Task
     public function getId(): ?int
     {
         return $this->id;
-    }
+
+    }//end getId()
 
 
     /**
@@ -55,7 +56,8 @@ class Task
     public function getTitle(): ?string
     {
         return $this->title;
-    }
+
+    }//end getTitle()
 
 
     /**
@@ -70,7 +72,8 @@ class Task
         $this->title = $title;
 
         return $this;
-    }
+
+    }//end setTitle()
 
 
     /**
@@ -81,7 +84,8 @@ class Task
     public function getContent(): ?string
     {
         return $this->content;
-    }
+
+    }//end getContent()
 
 
     /**
@@ -96,7 +100,8 @@ class Task
         $this->content = $content;
 
         return $this;
-    }
+
+    }//end setContent()
 
 
     /**
@@ -107,7 +112,8 @@ class Task
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
-    }
+
+    }//end getCreatedAt()
 
 
     /**
@@ -122,7 +128,8 @@ class Task
         $this->createdAt = $createdAt;
 
         return $this;
-    }
+
+    }//end setCreatedAt()
 
 
     /**
@@ -133,7 +140,8 @@ class Task
     public function isIsDone(): ?bool
     {
         return $this->isDone;
-    }
+
+    }//end isIsDone()
 
 
     /**
@@ -148,7 +156,8 @@ class Task
         $this->isDone = $isDone;
 
         return $this;
-    }
+
+    }//end setIsDone()
 
 
     /**
@@ -159,7 +168,8 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
-    }
+
+    }//end toggle()
 
 
     /**
@@ -170,7 +180,8 @@ class Task
     public function getAuthor(): ?User
     {
         return $this->author;
-    }
+
+    }//end getAuthor()
 
 
     /**
@@ -185,6 +196,8 @@ class Task
         $this->author = $author;
 
         return $this;
-    }
+
+    }//end setAuthor()
+
 
 }

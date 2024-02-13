@@ -8,6 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class TaskRepositoryTest extends TestCase
 {
+
+
+    /**
+     * Tests the constructor of the TaskRepository class.
+     */
     public function testConstructor()
     {
         // Create a mock object for ManagerRegistry.
@@ -18,5 +23,7 @@ class TaskRepositoryTest extends TestCase
 
         // Check that the UserRepository is instantiated correctly.
         $this->assertInstanceOf(TaskRepository::class, $taskRepository);
-    }
+
+    }//end testConstructor()
+
 }
