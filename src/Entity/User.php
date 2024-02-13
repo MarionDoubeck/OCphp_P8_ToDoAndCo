@@ -170,6 +170,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Erases the user's credentials.
      *
      * This method should clear any sensitive data stored temporarily on the user.
+     * 
+     * @return void
      */
     public function eraseCredentials(): void
     {

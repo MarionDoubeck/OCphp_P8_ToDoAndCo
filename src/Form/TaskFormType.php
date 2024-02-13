@@ -20,7 +20,7 @@ class TaskFormType extends AbstractType
      * This method is responsible for configuring the form fields and their options.
      *
      * @param FormBuilderInterface $builder The form builder.
-     * @param array $options The options for configuring the form.
+     * @param array                $options The options for configuring the form.
      * 
      * @return void
      */

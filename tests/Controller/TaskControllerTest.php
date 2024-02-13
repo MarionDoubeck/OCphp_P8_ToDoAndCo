@@ -99,7 +99,7 @@ class TaskControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit');
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/edit');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/edit');
 
         $this->assertResponseRedirects();
         $client->followRedirect();
@@ -119,7 +119,7 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirects();
 
         $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit');
-        $crawler = $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/edit');
+        $crawler = $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/edit');
 
         $this->assertSelectorExists(
             'button[type="submit"].btn.btn-success.pull-right',
@@ -157,7 +157,7 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirects();
 
         $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle(['taskToEdit']);
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/edit');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/edit');
 
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à modifier cette tâche');
 
@@ -178,7 +178,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskToDisplay');
         $isDone = $task->isIsDone();
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/toggle');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/toggle');
 
         $this->assertRouteSame('task_list');
         $this->assertSelectorExists('div.alert.alert-success');
@@ -200,7 +200,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskToDisplay');
         $isDone = $task->isIsDone();
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/toggle');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/toggle');
 
         $this->assertRouteSame('task_list');
         $this->assertSelectorExists('div.alert.alert-success');
@@ -222,7 +222,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskToDelete');
 
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/delete');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à supprimer cette tâche');
 
     }
@@ -242,7 +242,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskToDelete');
 
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/delete');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertRouteSame('task_list');
         $this->assertSelectorTextContains('.alert.alert-success[role="alert"]', 'Superbe ! La tâche a bien été supprimée.');
 
@@ -268,7 +268,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskAnonymusToDelete');
 
-        $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/delete');
+        $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à supprimer cette tâche');
     }
 
@@ -287,7 +287,7 @@ class TaskControllerTest extends WebTestCase
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskAnonymusToDelete');
 
-        $crawler = $client->request(Request::METHOD_GET, '/tasks/' . $task->getId() . '/delete');
+        $crawler = $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         //$this->assertRouteSame('task_list');
         $this->assertSelectorTextContains('.alert.alert-success[role="alert"]', 'Superbe ! La tâche a bien été supprimée.');
 

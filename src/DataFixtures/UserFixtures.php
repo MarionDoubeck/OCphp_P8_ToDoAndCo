@@ -11,8 +11,8 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 class UserFixtures extends Fixture implements FixtureGroupInterface
 {
-    /** @var integer $counter Counter for tracking iterations. */
 
+    /** @var integer $counter Counter for tracking iterations. */
     private $counter = 1;
 
 

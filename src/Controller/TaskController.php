@@ -100,7 +100,7 @@ class TaskController extends AbstractController
      * Edits a task.
      *
      * @param Task                   $taskToEdit    The task entity to edit.
-     * @param Request                $request        The request object.
+     * @param Request                $request       The request object.
      * @param EntityManagerInterface $entityManager The entity manager to persist the task changes.
      *
      * @return Response The response containing the form to edit the task or a redirection to the appropriate task list.
@@ -125,9 +125,8 @@ class TaskController extends AbstractController
                     return $this->redirectToRoute('done_task_list');
                 } else {
                     return $this->redirectToRoute('todo_task_list');
-
                 }
-                
+
             }
 
             return $this->render('task/edit.html.twig', [
