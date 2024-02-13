@@ -186,6 +186,8 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * Test to toggle the status of a task.
+     * 
+     * @return void
      */
     public function testTaskToggle(): void
     {
@@ -321,10 +323,10 @@ class TaskControllerTest extends WebTestCase
         $task = $taskRepository->findOneByTitle('taskAnonymusToDelete');
 
         $crawler = $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
-        //$this->assertRouteSame('task_list');
+        // $this->assertRouteSame('task_list');
         $this->assertSelectorTextContains('.alert.alert-success[role="alert"]', 'Superbe ! La tâche a bien été supprimée.');
 
-        //logout
+        // Logout.
         $tokenStorage = static::getContainer()->get('security.token_storage');
         $tokenStorage->setToken(null);
         $crawler = $client->request(Request::METHOD_GET, '/tasks/create');
