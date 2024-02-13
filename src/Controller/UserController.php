@@ -33,34 +33,32 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function displayUserListAction(
         EntityManagerInterface $entityManager,
-    ): Response {
+    ) : Response {
         $Users = $entityManager->getRepository(User::class)->findAll();
-        return $this->render('user/list.html.twig', [
-            'users' => $Users,
-        ]);
-    }
+        return $this->render('user/list.html.twig', ['users' => $Users]);
+    }//end displayUserListAction()
 
 
     /**
      * Displays the page to create a user.
      *
-     * @param Request                     $request              The request object.
-     * @param UserPasswordHasherInterface $userPasswordHasher   The password hasher service.
-     * @param UserAuthenticatorInterface  $userAuthenticator    The user authenticator service.
-     * @param UserAuthenticator           $authenticator        The authenticator service.
-     * @param EntityManagerInterface      $entityManager       The entity manager to persist the user.
+     * @param Request                     $request            The request object.
+     * @param UserPasswordHasherInterface $userPasswordHasher The password hasher service.
+     * @param UserAuthenticatorInterface  $userAuthenticator  The user authenticator service.
+     * @param UserAuthenticator           $authenticator      The authenticator service.
+     * @param EntityManagerInterface      $entityManager      The entity manager to persist the user.
      *
      * @return Response The response containing the form to create a user or a redirection to the user list.
      */
     #[Route('/users/create', name: 'user_create')]
     #[IsGranted('ROLE_ADMIN')]
-    public function createUserAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function createUserAction(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() === TRUE && $form->isValid() === TRUE) {
             // Encode the password.
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -70,23 +68,20 @@ class UserController extends AbstractController
             );
             // Set roles.
             $roles = $form->get('roles')->getData();
-            if($roles){
+            $user -> setRoles(['ROLE_USER']);
+            if($roles !== FALSE) {
                 $user -> setRoles(['ROLE_ADMIN', 'ROLE_USER']);
-            }else{
-                $user -> setRoles(['ROLE_USER']);
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
-            
+
             $this->addFlash('success','L\'utilisateur a bien été créé.');
             return $this->redirectToRoute('user_list');
 
         }
 
-        return $this->render('user/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
 
@@ -103,12 +98,11 @@ class UserController extends AbstractController
     #[Route('/users/{id}/edit', name: 'user_edit')]
     #[IsGranted('ROLE_ADMIN')]
     public function editUserAction(
-        User $userToEdit, 
+        User $userToEdit,
         Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher, 
+        UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(UserFormType::class, $userToEdit);
         $form->handleRequest($request);
 
