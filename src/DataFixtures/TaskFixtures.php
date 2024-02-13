@@ -33,7 +33,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
             $task->setContent($faker->text(rand(30,150)));
             $task->setCreatedAt(new \DateTimeImmutable());
             $task->setIsDone($faker->boolean);
-            // Half tasks related to 'Anonymus'
+            //Half tasks related to 'Anonymus'
             if (rand(0,1) >= 1) {
                 $user = null;
             } else {

@@ -202,7 +202,7 @@ class UserControllerTest extends WebTestCase
         $this->assertInputValueSame('user_form[email]', $userToEdit->getEmail());
 
         $form = $crawler->selectButton('Modifier')->form();
-        $form['user_form[username]' ] = 'modifiedUser';
+        $form['user_form[username]'] = 'modifiedUser';
         $form['user_form[password][first]'] = 'password';
         $form['user_form[password][second]'] = 'password';
         $form['user_form[email]'] = 'modified@user.user';
@@ -213,7 +213,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request(Request::METHOD_GET, '/users/'.$userToEdit->getId().'/edit');
         $form = $crawler->selectButton('Modifier')->form();
-        $form['user_form[username]' ] = 'userToEdit';
+        $form['user_form[username]'] = 'userToEdit';
         $form['user_form[password][first]'] = 'password';
         $form['user_form[password][second]'] = 'password';
         $form['user_form[email]'] = 'toEdit@user.user';

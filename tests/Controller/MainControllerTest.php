@@ -17,7 +17,7 @@ class MainControllerTest extends WebTestCase
 
     /**
      * Test case for displaying the homepage.
-     * 
+     *
      * @return void
      */
     public function testDisplayHomepage(): void

@@ -143,7 +143,7 @@ class TaskController extends AbstractController
 
             }
 
-        }// end if
+        }//end if
 
     }//end editTaskAction()
 
@@ -191,7 +191,7 @@ class TaskController extends AbstractController
         EntityManagerInterface $entityManager
     ): RedirectResponse {
         $connectedUser = $this->getUser();
-        if ($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) === TRUE && null === $taskToDelete->getAuthor())) {
+        if ($connectedUser === $taskToDelete->getAuthor() || (in_array('ROLE_ADMIN', $connectedUser->getRoles()) === TRUE && $taskToDelete->getAuthor() === null)) {
             $entityManager->remove($taskToDelete);
             $entityManager->flush();
 
