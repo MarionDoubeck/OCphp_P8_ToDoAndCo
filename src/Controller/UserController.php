@@ -83,7 +83,7 @@ class UserController extends AbstractController
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
 
-    }//end createUserAction
+    }//end createUserAction()
 
 
     /**
@@ -111,9 +111,11 @@ class UserController extends AbstractController
             if ($form->get('username')->getData() !== NULL && $form->get('username')->getData() !== $userToEdit->getUsername()) {
                 $userToEdit->setUsername($form->get('username')->getData());
             }
+
             if ($form->get('email')->getData() !== NULL && $form->get('email')->getData() !== $userToEdit->getEmail()) {
                 $userToEdit->setEmail($form->get('email')->getData());
             }
+
             if ($form->get('password')->getData() !== NULL) {
                 $userToEdit->setPassword(
                     $userPasswordHasher->hashPassword(
@@ -129,11 +131,13 @@ class UserController extends AbstractController
                 if ($roles !== $userToEdit->getRoles()) {
                     $userToEdit -> setRoles($realRoles);
                 }
+
             } else {
                 $realRoles = ['ROLE_USER'];
                 if ($roles !== $userToEdit->getRoles()) {
                     $userToEdit -> setRoles($realRoles);
                 }
+
             }
 
             $entityManager->persist($userToEdit);
@@ -146,16 +150,17 @@ class UserController extends AbstractController
                                                         'controller_name' => 'UserController',
                                                         'user' => $userToEdit,
                                                         'form' => $form->createView(),
-                                                    ]);
+                                                    ]
+        );
 
-    }//end editUserAction
+    }//end editUserAction()
 
 
     /**
      * Deletes a user.
      *
-     * @param User                        $userToDelete   The user entity to delete.
-     * @param EntityManagerInterface      $entityManager  The entity manager to remove the user and associated tasks.
+     * @param User                   $userToDelete  The user entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager to remove the user and associated tasks.
      *
      * @return RedirectResponse Redirects to the user list after deleting the user.
      */
@@ -174,7 +179,7 @@ class UserController extends AbstractController
         $this->addFlash('success', 'L\'utilisateur '.$userToDelete->getUsername().' a été supprimé avec succès');
         return $this->redirectToRoute('user_list');
 
-    }
+    }//end deleteUserAction()
 
 
 }
