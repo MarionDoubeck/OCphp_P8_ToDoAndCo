@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $tasks;
 
 
+    /**
+     * Constructor function for initializing the tasks collection.
+     */
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -131,7 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // Guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);

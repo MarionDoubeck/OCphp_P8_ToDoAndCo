@@ -8,9 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MainControllerTest extends WebTestCase
 {
+
+    /**
+     * The client used for testing. Initialized as null.
+     */
     private KernelBrowser|null $client = null;
 
 
+    /**
+     * Test case for displaying the homepage.
+     * 
+     * @return void
+     */
     public function testDisplayHomepage(): void
     {
         $this->client = static::createClient();

@@ -130,9 +130,10 @@ class TaskController extends AbstractController
             }
 
             return $this->render('task/edit.html.twig', [
-                'form' => $form->createView(),
-                'task' => $taskToEdit,
-            ]);
+                                                         'form' => $form->createView(),
+                                                         'task' => $taskToEdit,
+                                                        ]
+            );
         } else {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé.e à modifier cette tâche');
             if ($taskToEdit->isIsDone()) {
