@@ -221,4 +221,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }//end getTasks()
 
 
-}
+}//end class

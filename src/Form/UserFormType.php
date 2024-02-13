@@ -53,4 +53,4 @@ class UserFormType extends AbstractType
     }//end buildForm()
 
 
-}
+}//end class

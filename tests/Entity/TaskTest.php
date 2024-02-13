@@ -12,6 +12,11 @@ class TaskTest extends TestCase
 {
 
 
+    /**
+     * Test the Task entity.
+     * 
+     * @return void
+     */
     public function testTaskEntity()
     {
         $task = new Task;
@@ -31,7 +36,8 @@ class TaskTest extends TestCase
         $task->toggle(false);
         $this->assertEquals(false, $task->isIsDone());
         $this->assertNull($task->getId());
-    }
+
+    }//end testTaskEntity()
 
 
-}
+}//end class

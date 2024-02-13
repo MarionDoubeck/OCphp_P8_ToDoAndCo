@@ -56,4 +56,4 @@ class UserRepositoryTest extends WebTestCase
     }//end testUpgradePassword()
 
 
-}//end UserRepositoryTest
+}//end class

@@ -29,7 +29,7 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
 
-    }
+    }//end _construct
 
 
-}
+}//end class

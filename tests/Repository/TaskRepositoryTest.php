@@ -29,4 +29,4 @@ class TaskRepositoryTest extends TestCase
     }//end testConstructor()
 
 
-}
+}//end class

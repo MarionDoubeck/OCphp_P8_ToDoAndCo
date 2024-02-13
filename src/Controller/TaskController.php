@@ -35,7 +35,7 @@ class TaskController extends AbstractController
             ->getResult();
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
 
-    }// end displayTodoTaskListAction()
+    }//end displayTodoTaskListAction()
 
 
     /**
@@ -205,4 +205,4 @@ class TaskController extends AbstractController
     }//end deleteTaskAction()
 
 
-}
+}//end class

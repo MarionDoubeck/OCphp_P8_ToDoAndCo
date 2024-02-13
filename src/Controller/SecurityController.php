@@ -50,4 +50,4 @@ class SecurityController extends AbstractController
     }//end logout()
 
 
-}
+}//end class
