@@ -20,16 +20,24 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
-    // Id of the user.
+    /**
+     * Id of the user.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    // Username of the user.
+
+    /**
+     * Username of the user.
+     */
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
+    /**
+     * Array of roles of the user. Users have at least USER_ROLE
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -39,11 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    // Email of the user.
+    /**
+     * Email of the user
+     */
     #[ORM\Column(length: 60)]
     private ?string $email = null;
 
-    // Tasks of the user.
+    /**
+     * All tasks oh the user
+     */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'author')]
     private Collection $tasks;
 

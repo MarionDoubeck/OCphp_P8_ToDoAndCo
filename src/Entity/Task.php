@@ -16,31 +16,43 @@ use Doctrine\ORM\Mapping as ORM;
 class Task
 {
 
-    // Id of the task.
+    /**
+     * Id of the task.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    // Title of the task.
+    /**
+     * Title of the task.
+     */ 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $title = null; 
+    private ?string $title = null;
 
-    // Content of the task.
+    /**
+     * Content of the task.
+     */ 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null; 
+    private ?string $content = null;
 
-    // Creation date of the task.
+    /**
+     * Creation date of the task.
+     */
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null; 
+    private ?\DateTimeImmutable $createdAt = null;
 
-    // Indicates if the task is done or not.
+    /**
+     * Indicates if the task is done or not.
+     */
     #[ORM\Column]
-    private ?bool $isDone = null; 
+    private ?bool $isDone = null;
 
-    // Author of the task.
+    /**
+     * Author of the task.
+     */
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?User $author = null; 
+    private ?User $author = null;
 
 
     /**
