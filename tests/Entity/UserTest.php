@@ -11,7 +11,7 @@ class UserTest extends TestCase
 
     /**
      * Test the User entity.
-     * 
+     *
      * @return void
      */
     public function testUserEntity(): void

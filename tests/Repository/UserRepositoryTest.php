@@ -33,7 +33,7 @@ class UserRepositoryTest extends WebTestCase
 
     /**
      * Tests the upgradePassword method of the UserRepository class.
-     * 
+     *
      * @return void
      */
     public function testUpgradePassword()

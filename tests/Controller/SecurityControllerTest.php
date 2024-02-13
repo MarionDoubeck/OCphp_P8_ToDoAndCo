@@ -10,7 +10,7 @@ class SecurityControllerTest extends WebTestCase
 
     /**
      * Tests that the login page is accessible.
-     * 
+     *
      * @return void
      */
     public function testLoginPageIsAccessible()
@@ -27,7 +27,7 @@ class SecurityControllerTest extends WebTestCase
 
     /**
      * Tests that the logout page throws a LogicException.
-     * 
+     *
      * @return void
      */
     public function testLogoutPageThrowsLogicException()

@@ -20,7 +20,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
      * Task titles, contents, authors, creationDate, and isDone are randomized.
      *
      * @param ObjectManager $manager The entity manager to persist the data.
-     * 
+     *
      * @return void
      */
     public function load(ObjectManager $manager): void

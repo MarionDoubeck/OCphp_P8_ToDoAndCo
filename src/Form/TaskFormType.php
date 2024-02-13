@@ -21,7 +21,7 @@ class TaskFormType extends AbstractType
      *
      * @param FormBuilderInterface $builder The form builder.
      * @param array                $options The options for configuring the form.
-     * 
+     *
      * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
