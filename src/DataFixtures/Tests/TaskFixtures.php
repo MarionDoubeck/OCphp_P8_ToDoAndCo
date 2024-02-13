@@ -16,7 +16,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
      * Load dummy task data into the database for tests.
      *
      * @param ObjectManager $manager The entity manager to persist the data.
-     * 
+     *
      * @return void
      */
     public function load(ObjectManager $manager): void

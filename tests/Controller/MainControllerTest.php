@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MainControllerTest extends WebTestCase
 {
     private KernelBrowser|null $client = null;
-    
+
     public function testDisplayHomepage(): void
     {
         $this->client = static::createClient();

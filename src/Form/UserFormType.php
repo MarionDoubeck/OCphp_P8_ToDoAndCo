@@ -19,35 +19,38 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class UserFormType extends AbstractType
 {
 
+
     /**
      * Builds the form.
      *
      * This method is responsible for configuring the form fields and their options.
      *
      * @param FormBuilderInterface $builder The form builder.
-     * @param array $options The options for configuring the form.
+     * @param array $options                The options for configuring the form.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options): void {
         $builder
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
-            ->add('password', RepeatedType::class, [
+            ->add('password', RepeatedType::class,
+            [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
-            ])
+            ]
+            )
             ->add('email', EmailType::class, ['label' => 'Adresse email'])
-            ->add('roles', CheckboxType::class, [
+            ->add('roles', CheckboxType::class,
+            [
                 'mapped' => false,
                 'required' => false,
-                'attr' => [
-                    'class' => 'my-2'
-                ],
+                'attr' => ['class' => 'my-2'],
                 'label' => 'Voulez-vous inscrire cet utilisateur en tant qu\'administrateur ? Oui '
-            ])
+            ]
+            )
         ;
-    }
+    }//end buildForm()
+
 
 }
