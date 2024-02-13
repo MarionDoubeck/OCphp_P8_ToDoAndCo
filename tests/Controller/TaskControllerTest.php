@@ -196,7 +196,7 @@ class TaskControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByUsername('userToLog');
         $client->loginUser($testUser);
         $client->followRedirects();
-        
+
         $taskRepository = static::getContainer()->get(TaskRepository::class);
         $task = $taskRepository->findOneByTitle('taskToDisplay');
         $isDone = $task->isIsDone();
@@ -205,7 +205,8 @@ class TaskControllerTest extends WebTestCase
         $this->assertRouteSame('task_list');
         $this->assertSelectorExists('div.alert.alert-success');
         $this->assertSame(!$isDone, $task->isIsDone());
-    }
+
+    }//end testTaskToggle()
 
 
     /**
