@@ -22,9 +22,9 @@ and reduce its technical debt.
 - CLI de symfony 5.8.6,
 - composer 2.7.1
 
-## Projet Installation
+## Project Installation
 
-### Cloner the Projet
+### Clone the Projcet
 
 To obtain a local copy of the project, use the following command:
 
