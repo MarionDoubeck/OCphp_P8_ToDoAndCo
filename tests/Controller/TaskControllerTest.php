@@ -33,7 +33,7 @@ class TaskControllerTest extends WebTestCase
         $client->request(Request::METHOD_GET, '/tasks');
 
         $this->assertResponseIsSuccessful();
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('todo_task_list');
 
     }//end testListWhenLoggedInAsUser()
 
@@ -98,7 +98,7 @@ class TaskControllerTest extends WebTestCase
         $form['task_form[content]'] = 'My task content';
         $client->submit($form);
 
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('todo_task_list');
         $this->assertSelectorExists('div.alert.alert-success');
 
     }//end testCreateTask()
@@ -112,7 +112,7 @@ class TaskControllerTest extends WebTestCase
     public function testEditTaskWhenNotLoggedIn(): void
     {
         $client = static::createClient();
-        $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit');
+        $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit1');
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/edit');
 
         $this->assertResponseRedirects();
@@ -135,7 +135,7 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($testUser);
         $client->followRedirects();
 
-        $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit');
+        $task = static::getContainer()->get(TaskRepository::class)->findOneByTitle('taskToEdit1');
         $crawler = $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/edit');
 
         $this->assertSelectorExists(
@@ -152,7 +152,7 @@ class TaskControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseIsSuccessful();
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('todo_task_list');
         $this->assertSelectorTextContains('.alert.alert-success[role="alert"]', 'Superbe ! La tâche a bien été modifiée.');
 
         $form = $crawler->selectButton('Modifier')->form();
@@ -202,7 +202,7 @@ class TaskControllerTest extends WebTestCase
         $isDone = $task->isIsDone();
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/toggle');
 
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('done_task_list');
         $this->assertSelectorExists('div.alert.alert-success');
         $this->assertSame(!$isDone, $task->isIsDone());
 
@@ -227,7 +227,7 @@ class TaskControllerTest extends WebTestCase
         $isDone = $task->isIsDone();
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/toggle');
 
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('todo_task_list');
         $this->assertSelectorExists('div.alert.alert-success');
         $this->assertSame(!$isDone, $task->isIsDone());
 
@@ -248,7 +248,7 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirects();
 
         $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $task = $taskRepository->findOneByTitle('taskToDelete');
+        $task = $taskRepository->findOneByTitle('taskToDelete1');
 
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
         $this->assertSelectorTextContains('.alert.alert-danger[role="alert"]', 'Oops ! Vous n\'êtes pas autorisé.e à supprimer cette tâche');
@@ -270,10 +270,10 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirects();
 
         $taskRepository = static::getContainer()->get(TaskRepository::class);
-        $task = $taskRepository->findOneByTitle('taskToDelete');
+        $task = $taskRepository->findOneByTitle('taskToDelete1');
 
         $client->request(Request::METHOD_GET, '/tasks/'.$task->getId().'/delete');
-        $this->assertRouteSame('task_list');
+        $this->assertRouteSame('todo_task_list');
         $this->assertSelectorTextContains('.alert.alert-success[role="alert"]', 'Superbe ! La tâche a bien été supprimée.');
 
         $crawler = $client->request(Request::METHOD_GET, '/tasks/create');
