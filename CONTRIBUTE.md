@@ -9,17 +9,25 @@ If you encounter any issues with the project, please feel free to report them on
 ## Contributing Code
 1. Fork the repository on GitHub.
 2. Clone the forked repository to your local machine.
-git clone https://github.com/YourUsername/YourProject.git
+```
+git clone https://github.com/MarionDoubeck/OCphp_P8_ToDoAndCo
+```
 
 3. Create a new branch for your contribution.
+```
 git checkout -b feature/YourFeature
+```
 
 4. Make your changes in the branch. Ensure your code follows the project's coding standards and conventions.
 5. Commit your changes with descriptive commit messages.
+```
 git commit -m "Add new feature"
+```
 
 6. Push your branch to your fork on GitHub.
+```
 git push origin feature/YourFeature
+```
 
 7. Submit a pull request (PR) to the main repository's main or master branch. Be sure to include a detailed description of your changes in the PR.
 
