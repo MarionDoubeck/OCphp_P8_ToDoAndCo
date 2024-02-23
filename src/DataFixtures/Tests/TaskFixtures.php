@@ -58,7 +58,23 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface, Fixture
         $task5->setCreatedAt(new \DateTimeImmutable());
         $task5->setIsDone(false);
         $task5->setAuthor($this->getReference('user_to_log'));
-        $manager->persist($task2);
+        $manager->persist($task5);
+
+        $task6 = new Task();
+        $task6->setTitle('taskToEdit1');
+        $task6->setContent('taskToEdit1');
+        $task6->setCreatedAt(new \DateTimeImmutable());
+        $task6->setIsDone(false);
+        $task6->setAuthor($this->getReference('author_of_tasks'));
+        $manager->persist($task6);
+
+        $task7 = new Task();
+        $task7->setTitle('taskToDelete1');
+        $task7->setContent('taskToDelete1');
+        $task7->setCreatedAt(new \DateTimeImmutable());
+        $task7->setIsDone(false);
+        $task7->setAuthor($this->getReference('author_of_tasks'));
+        $manager->persist($task7);
 
         $manager->flush();
 
